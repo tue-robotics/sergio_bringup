@@ -1,0 +1,4 @@
+port: 8000
+index_names:
+  - sergio.html
+  - index.html

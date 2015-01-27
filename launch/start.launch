@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<launch>
+
+    <group ns="sergio">
+
+        <!-- PARAMETERS: desciption, joint groups and specific skills -->
+        <param name="robot_description" textfile="$(find sergio_description)/urdf/sergio.urdf" />
+        <rosparam file="$(find sergio_description)/custom/joint_groups.yaml" command="load" />
+        <rosparam file="$(find sergio_description)/custom/skills.yaml" command="load" />
+
+        <!-- Robot state publisher -->
+        <include file="$(find robot_launch_files)/launch/essentials/robot_state_publisher.launch" />
+
+        <!-- Phone UI -->
+        <include file="$(find robot_launch_files)/launch/interaction/mobile_ui_server.launch" />
+
+        <!-- Launch simulator if we are not on a real robot -->
+        <group unless="$(optenv ROBOT_REAL false)">
+
+            <!-- Simulator -->
+            <include file="$(find robot_launch_files)/launch/simulator/simulator.launch" />
+
+        </group>
+
+    </group>
+
+    <!-- TF Server: advertises services for looking up transformations -->
+    <include file="$(find robot_launch_files)/launch/essentials/tf_server.launch" />
+
+    <!-- DIAGNOSTICS -->
+    <include file="$(find robot_launch_files)/launch/diagnostics/diagnostics.launch" />
+
+ </launch>
