@@ -1,0 +1,81 @@
+########################################################################
+#                                                                      #
+# Head deployer file 											   	   #
+#                                                                      #
+# Ton Peters                                                           #
+#                                                                      #
+########################################################################
+
+#### DECLARATION OF PARAMETERS ####
+var double TS 				= 0.001
+var int BODYNUMBER 			= 5
+var string BODYPARTNAME 	= "head"
+var bool HOMEABLE 			= false
+var bool HOMINGOBLIGATORY	= false
+var bool RESETTABLE			= false
+var string DYNAMIXEL_SLAVE	= os.getenv("TORSO_SLAVE_3");
+var string ROBOT 			= "/sergio"
+
+
+var double RAD_TO_STEP 	= 195.37860814; # IF YOU CHANGE THIS VARIABLE, ALSO RECALCULATE PAN_MIN, PAN_MAX, TILT_MIN AND TILT_MAX, (From header file) 
+
+var strings JOINT_NAMES = strings( "neck_pan_joint", "neck_tilt_joint", "laser_tilt_joint" )
+
+# head pan joint  					(range 164~770)
+var int PAN_ID 			= 1 ; 		# Dynamixel id
+var int PAN_OFFSET 		= 467; 		# Center pan dynamixel
+var int PAN_MIN 		= -303; 	# -1.545*RAD_TO_STEP
+var int PAN_MAX 		= 303; 		#  1.545*RAD_TO_STEP
+var int PAN_SPEED 		= 50;
+
+# head tilt joint					(range 190~570)
+var int TILT_ID 		= 2 ; 		# Dynamixel id
+var int TILT_OFFSET 	= 380; 		# Center tilt dynamixel
+var int TILT_MIN 		= -190; 	# -0.973 *RAD_TO_STEP
+var int TILT_MAX 		= 190; 		#  0.973*RAD_TO_STEP
+var int TILT_SPEED 	 	= 25;
+
+# laser tilt joint
+var int LASER_ID 		= 3 ; 		# Dynamixel id
+var int LASER_OFFSET 	= 620; 		# Center laser dynamixel (Can be changed)
+var int LASER_MIN 		= -4; 		# -0.0205 *RAD_TO_STEP  (-4)
+var int LASER_MAX 		= 58;	 	#  0.2969 *RAD_TO_STEP  (58)
+var int LASER_SPEED 	= 25;
+
+### AddBodyPart ###
+Supervisor.AddBodyPart( BODYNUMBER, BODYPARTNAME, HOMEABLE, HOMINGOBLIGATORY, RESETTABLE)
+
+## Dynamixel controller
+loadComponent("DYNAMIXEL_Controller", "DYNAMIXEL::DynamixelController")
+addPeer("Supervisor","DYNAMIXEL_Controller")
+setActivity("DYNAMIXEL_Controller",TS,HighestPriority,ORO_SCHED_RT)
+DYNAMIXEL_Controller.joint_names 		= JOINT_NAMES
+DYNAMIXEL_Controller.dynamixel_ids		= ints(PAN_ID,					TILT_ID,				LASER_ID)
+DYNAMIXEL_Controller.dynamixel_offset 	= ints(PAN_OFFSET, 				TILT_OFFSET,			LASER_OFFSET)
+DYNAMIXEL_Controller.dynamixel_max 		= ints(PAN_OFFSET + PAN_MAX, 	TILT_OFFSET + TILT_MAX,	LASER_OFFSET + LASER_MAX)
+DYNAMIXEL_Controller.dynamixel_min 		= ints(PAN_OFFSET + PAN_MIN, 	TILT_OFFSET + TILT_MIN, LASER_OFFSET + LASER_MIN)
+DYNAMIXEL_Controller.dynamixel_speed 	= ints(PAN_SPEED, 				TILT_SPEED,				LASER_SPEED)
+DYNAMIXEL_Controller.configure
+
+## Dynamixel enabler
+loadComponent("DYNAMIXEL_Enabler", "AMIGOHEAD::HeadEnabler")
+addPeer("Supervisor","DYNAMIXEL_Enabler")
+setActivity("DYNAMIXEL_Enabler",TS,HighestPriority,ORO_SCHED_RT)
+DYNAMIXEL_Enabler.configure
+
+#### CONNECT COMPONENTS ####
+connect (DYNAMIXEL_SLAVE+".data_tx", "DYNAMIXEL_Controller.instruction", ConnPolicy() )
+connect (DYNAMIXEL_SLAVE+".data_rx", "DYNAMIXEL_Controller.status", ConnPolicy() )
+connect (DYNAMIXEL_SLAVE+".ready_rx", "DYNAMIXEL_Controller.serialReadyRx", ConnPolicy() )
+connect (DYNAMIXEL_SLAVE+".running", "DYNAMIXEL_Controller.serialRunning", ConnPolicy() )
+connect ("DYNAMIXEL_Controller.errortosupervisor","Supervisor.head_error", ConnPolicy() )
+connect ("DYNAMIXEL_Enabler.out","DYNAMIXEL_Controller.enabler", ConnPolicy() )
+
+#### CONNECT ROS STREAMS ####
+stream( "DYNAMIXEL_Controller.goalPos", ros.topic(ROBOT+"/dynamixel/references"))
+stream( "DYNAMIXEL_Controller.currentPos", ros.topic(ROBOT+"/dynamixel/measurements"))
+stream( "DYNAMIXEL_Controller.currentPos", ros.topic(ROBOT+"/joint_states"))
+
+#### START COMPONENTS ####
+Supervisor.AddAllwaysOnPeer ("DYNAMIXEL_Controller")
+Supervisor.AddEnabledPeer ("DYNAMIXEL_Enabler",BODYNUMBER)
