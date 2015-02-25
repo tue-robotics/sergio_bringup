@@ -4,7 +4,7 @@
     <group ns="sergio">
 
         <!-- PARAMETERS: desciption, joint groups and specific skills -->
-        <param name="robot_description" textfile="$(find sergio_description)/urdf/amigo.urdf" />
+        <param name="robot_description" textfile="$(find sergio_description)/urdf/sergio.urdf" />
         <rosparam file="$(find sergio_description)/custom/joint_groups.yaml" command="load" />
         <rosparam file="$(find sergio_description)/custom/skills.yaml" command="load" />
 
