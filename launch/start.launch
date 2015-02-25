@@ -4,15 +4,19 @@
     <group ns="sergio">
 
         <!-- PARAMETERS: desciption, joint groups and specific skills -->
-        <param name="robot_description" textfile="$(find sergio_description)/urdf/sergio.urdf" />
+        <param name="robot_description" textfile="$(find sergio_description)/urdf/amigo.urdf" />
         <rosparam file="$(find sergio_description)/custom/joint_groups.yaml" command="load" />
         <rosparam file="$(find sergio_description)/custom/skills.yaml" command="load" />
 
         <!-- Robot state publisher -->
-        <include file="$(find robot_launch_files)/launch/essentials/robot_state_publisher.launch" />
+        <include file="$(find robot_launch_files)/launch/essentials/robot_state_publisher.launch">
+            <arg name="machine" value="sergio1" />
+        </include>
 
         <!-- Phone UI -->
-        <include file="$(find robot_launch_files)/launch/interaction/mobile_ui_server.launch" />
+        <include file="$(find robot_launch_files)/launch/interaction/mobile_ui_server.launch">
+            <arg name="machine" value="sergio1" />
+        </include>
 
         <!-- Launch simulator if we are not on a real robot -->
         <group unless="$(optenv ROBOT_REAL false)">
@@ -22,12 +26,16 @@
 
         </group>
 
+        <!-- DIAGNOSTICS -->
+        <include file="$(find robot_launch_files)/launch/diagnostics/diagnostics.launch" >
+            <arg name="machine" value="sergio1" />
+        </include>
+
     </group>
 
     <!-- TF Server: advertises services for looking up transformations -->
-    <include file="$(find robot_launch_files)/launch/essentials/tf_server.launch" />
-
-    <!-- DIAGNOSTICS -->
-    <include file="$(find robot_launch_files)/launch/diagnostics/diagnostics.launch" />
+    <include file="$(find robot_launch_files)/launch/essentials/tf_server.launch" >  
+        <arg name="machine" value="sergio1" />
+    </include>
 
  </launch>

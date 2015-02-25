@@ -1,5 +1,8 @@
 <launch>
-  <machine name="sergio3" address="sergio3" default="never" user="amigo" env-loader="/home/amigo/.ros-bash-and-run.sh">
-  </machine>
+	<group if="$(optenv ROBOT_REAL false)">
+		<machine name="sergio3" address="sergio3" default="never" user="amigo" env-loader="/home/amigo/.ros-bash-and-run.sh"/>
+	</group>
+	<group unless="$(optenv ROBOT_REAL false)">
+		<machine name="sergio3" address="localhost"/>
+	</group>
 </launch>
-
