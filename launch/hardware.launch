@@ -28,10 +28,10 @@
 	    </include>
         
         <!-- SENSORS -->
-        <include file="$(find robot_launch_files)/launch/hardware/sensors/kinect.launch">
+        <!--include file="$(find robot_launch_files)/launch/hardware/sensors/kinect.launch">
             <arg name="name" value="top_kinect"/>
             <arg name="machine" value="sergio3"/>
-        </include>
+        </include-->
         <include file="$(find robot_launch_files)/launch/hardware/sensors/laser.launch">
             <arg name="name" value="base_laser"/>
             <arg name="machine" value="sergio1"/>
