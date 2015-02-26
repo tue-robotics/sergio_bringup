@@ -74,23 +74,3 @@ DWAPlannerROS:
     arrive_plan_scale: 0.0
     arrive_goal_scale: 1.0
 
-    align_cmd_px:  0.0
-    align_cmd_nx:  0.0
-    align_cmd_py:  0.0
-    align_cmd_ny:  0.0
-    align_cmd_pth: 0.0
-    align_cmd_nth: 0.0
-    
-    default_cmd_px:  0.0
-    default_cmd_nx:  0.0
-    default_cmd_py:  0.0
-    default_cmd_ny:  0.0
-    default_cmd_pth: 0.0
-    default_cmd_nth: 0.0
-    
-    arrive_cmd_px:  0.0
-    arrive_cmd_nx:  0.0
-    arrive_cmd_py:  0.0
-    arrive_cmd_ny:  0.0
-    arrive_cmd_pth: 0.0
-    arrive_cmd_nth: 0.0
