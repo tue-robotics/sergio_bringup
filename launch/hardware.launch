@@ -7,10 +7,10 @@
         <include file="$(find robot_launch_files)/launch/hardware/deployer.launch">
             <arg name="DEPLOYER_ARGS" value="gnulinux
                 HARDWARE
-                -s $(env ROBOT_PARAMETER_PATH)/hardware/actuators/soem.ops
-                -s $(env ROBOT_PARAMETER_PATH)/hardware/actuators/base_controller.ops
-                -s $(env ROBOT_PARAMETER_PATH)/hardware/actuators/tracing/trace_always_odom.ops
-                -s $(env ROBOT_PARAMETER_PATH)/hardware/actuators/all_dynamixel_controllers.ops
+                -s $(find sergio_bringup)/parameters/hardware/actuators/soem.ops
+                -s $(find sergio_bringup)/parameters/hardware/actuators/base_controller.ops
+                -s $(find sergio_bringup)/parameters/hardware/actuators/all_dynamixel_controllers.ops
+                -s $(find sergio_bringup)/parameters/hardware/actuators/torso_joint_publisher.ops
             "/>
             <arg name="NAME" value ="hardware"/>
             <arg name="LOG_LEVEL" value="Warning"/>

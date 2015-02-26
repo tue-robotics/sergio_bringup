@@ -22,28 +22,28 @@ var string  ROBOT 			= "/sergio";
 loadService("HARDWARE","os")
 os.setenv("BASE_SLAVE_1",	BASE_SLAVE_1)
 os.setenv("BASE_SLAVE_2",	BASE_SLAVE_2)
-os.setenv("TORSO_SLAVE_1",	TORSO_SLAVE_1)
+os.setenv( "TORSO_SLAVE_1",	TORSO_SLAVE_1)
 os.setenv("TORSO_SLAVE_2",	TORSO_SLAVE_2)
 os.setenv("TORSO_SLAVE_3",	TORSO_SLAVE_3)
 
 #### LOAD SUPERVISOR ###
+# TODO correct ports if dashboard is adjusted
 loadComponent("Supervisor","SUPERVISORY::Supervisor")
 Supervisor.ebuttonorder	= strings("Wireless","Wired","Endswitch","Reset")
 Supervisor.configure
 setActivity("Supervisor",0.04,LowestPriority,ORO_SCHED_OTHER)
-#stream("Supervisor.ebuttonWireless", ros.topic(ROBOT+"/ebuttonWireless"));
-stream("Supervisor.ebuttonWireless", ros.topic(ROBOT+"/runstop")); # to be removed
+stream("Supervisor.ebuttonWireless", ros.topic(ROBOT+"/ebuttonWireless"));
 stream("Supervisor.ebuttonWired", ros.topic(ROBOT+"/ebuttonWired"));
 stream("Supervisor.ebuttonEndswitch", ros.topic(ROBOT+"/ebuttonEndswitch"));
-#stream("Supervisor.ebuttonReset", ros.topic(ROBOT+"/ebuttonReset"));
-stream("Supervisor.ebuttonReset", ros.topic(ROBOT+"/emergency_switch"));  # to be removed
+stream("Supervisor.ebuttonReset", ros.topic(ROBOT+"/ebuttonReset"));
 stream("Supervisor.rosshutdown", ros.topic(ROBOT+"/etherCAT_shutdown")); 
 stream("Supervisor.rosetherCATenabled", ros.topic(ROBOT+"/etherCAT_enabled")); 
 stream("Supervisor.hardware_status", ros.topic(ROBOT+"/hardware_status")); 
 stream("Supervisor.dashboardCmd", ros.topic(ROBOT+"/dashboard_ctrlcmds")); 
+stream("Supervisor.ebutton_status", ros.topic(ROBOT+"/ebutton_status"));
 
 #### Create Robot Object ####
-var strings DEFAULT_PART_NAMES = strings("base","spindle"); #,"torso","left_arm", "right_arm", "head")
+var strings DEFAULT_PART_NAMES = strings("base","head"); #,"torso","left_arm", "right_arm", "head")
 Supervisor.CreateRobotObject("sergio", DEFAULT_PART_NAMES)
 
 ### LOAD SOEM COMPONENT FOR ETHERCAT COMMUNICATION ###
@@ -52,34 +52,21 @@ addPeer("Supervisor","Soem")
 Soem.configure
 setActivity("Soem",Ts,HighestPriority,ORO_SCHED_RT)
 
-connect (BASE_SLAVE_1+".encoder1", "Supervisor.serialRunning", ConnPolicy() ) ;
+connect ("Soem.Slave_1001.encoder1", "Supervisor.serialRunning", ConnPolicy() ) ;
 
 #### LOAD COMPONENT TO ENABLE ANALOG INS (only force sensors are used)###
 loadComponent("AnalogIns","SOEM::AnalogInsGeneric");
 addPeer("Supervisor","AnalogIns")
-AnalogIns.numberofinports = 2;
-AnalogIns.input_sizes = array(3.0, 3.0)
-AnalogIns.numberofoutports = 3;
-AnalogIns.output_sizes = array(1.0, 1.0, 4.0); # battery[1], thermal[2], emergency[3,4,5,6]
-AnalogIns.input_positions = array(1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
-AnalogIns.direct_to_ROS = false
+AnalogIns.inport_dimensions = array(3.0, 3.0);
+AnalogIns.outport_dimensions = array(1.0, 1.0, 4.0);;
+AnalogIns.from_which_inport = array(1.0, 1.0, 1.0, 2.0, 2.0, 2.0);
+AnalogIns.from_which_entry = array(1.0, 2.0, 3.0, 1.0, 2.0, 3.0);
 AnalogIns.configure
 setActivity("AnalogIns",1.0,HighestPriority,ORO_SCHED_RT)
 
-connect ("AnalogIns.in1",BASE_SLAVE_1 +".forceSensors", ConnPolicy() );
-connect ("AnalogIns.in2",BASE_SLAVE_2 +".forceSensors", ConnPolicy() );
-#connect ("AnalogIns.in3",BASE_SLAVE_1 +".positionSensors", ConnPolicy() );
-#connect ("AnalogIns.in4",BASE_SLAVE_2 +".positionSensors", ConnPolicy() );
-
-#### LOAD COMPONENT TO STREAM ANALOG INS FORCE DATA TO ROS ###
-loadComponent("AnalogInsFToRos", "ROS::DoublesToROS");
-addPeer("Supervisor", "AnalogInsFToRos")
-setActivity("AnalogInsFToRos",0.1,LowestPriority,ORO_SCHED_OTHER)
-AnalogInsFToRos.NumberOfDoublesInVector = 1;
-AnalogInsFToRos.configure;
-
-connect ("AnalogIns.out1", "AnalogInsFToRos.in", ConnPolicy() )
-stream("AnalogInsFToRos.out1", ros.topic("/sergio/battery_value"))
+connect ("AnalogIns.beckhoffmsg_in_1",BASE_SLAVE_1 +".forceSensors", ConnPolicy() );
+connect ("AnalogIns.beckhoffmsg_in_2",BASE_SLAVE_2 +".forceSensors", ConnPolicy() );
+stream("AnalogIns.rosmsg_out_1", ros.topic("/sergio/battery_value"))
 
 
 #### LOAD COMPONENT TO SEND EMERGENCY SWITCH STATUS TO ROS ###
@@ -93,15 +80,11 @@ EmergencyToRos.smaller = ints(1, 1, 1, 1);
 EmergencyToRos.direct_to_ROS = true;
 EmergencyToRos.configure;
 
-connect ("AnalogIns.out3", "EmergencyToRos.in1", ConnPolicy() )
+connect ("AnalogIns.stdvect_out_3", "EmergencyToRos.in1", ConnPolicy() )
 stream("EmergencyToRos.outmsg1", ros.topic(ROBOT+"/ebuttonEndswitch"))
 stream("EmergencyToRos.outmsg2", ros.topic(ROBOT+"/ebuttonWired")); 
-#stream("EmergencyToRos.outmsg3", ros.topic(ROBOT+"/ebuttonReset"))
-#stream("EmergencyToRos.outmsg4", ros.topic(ROBOT+"/ebuttonWireless"))
-
-# remove following connections when dashboard is implemented
-stream("EmergencyToRos.outmsg3", ros.topic(ROBOT+"/emergency_switch"))
-stream("EmergencyToRos.outmsg4", ros.topic(ROBOT+"/runstop"))
+stream("EmergencyToRos.outmsg3", ros.topic(ROBOT+"/ebuttonReset"))
+stream("EmergencyToRos.outmsg4", ros.topic(ROBOT+"/ebuttonWireless"))
 
 
 ### READ WHEEL ENCODERS ###
@@ -116,22 +99,17 @@ addPeer("Supervisor","BASE_ReadEncoders")
 setActivity("BASE_ReadEncoders",Ts,HighestPriority,ORO_SCHED_RT)
 BASE_ReadEncoders.encoderbits = ENCODERBITS;
 BASE_ReadEncoders.enc2SI = array (ENC2RAD, ENC2RAD, ENC2RAD, ENC2RAD)
-#BASE_ReadEncoders.timestep = 0.000000256
-#BASE_ReadEncoders.timebits = 65536
-#BASE_ReadEncoders.time2enc = array(2.0, 2.0)
 BASE_ReadEncoders.configure
 
 connect (BASE_SLAVE_1+".encoder1","BASE_ReadEncoders.enc1_in", ConnPolicy() ); #enc1[-]
 connect (BASE_SLAVE_1+".encoder2","BASE_ReadEncoders.enc2_in", ConnPolicy() ); #enc2[-]
 connect (BASE_SLAVE_2+".encoder1","BASE_ReadEncoders.enc3_in", ConnPolicy() ); #enc3[-]
 connect (BASE_SLAVE_2+".encoder2","BASE_ReadEncoders.enc4_in", ConnPolicy() ); #enc4[-]
-#connect (BASE_SLAVE_1+".timeStamp","BASE_ReadEncoders.time1_in", ConnPolicy() ); #time1[-]
-#connect (BASE_SLAVE_2+".timeStamp","BASE_ReadEncoders.time2_in", ConnPolicy() ); #time2[-]
 
 
 ### READ TORSO ENCODERS ###
 var int ENCODERBITS_T 		= 65536;					# Max encoderbits (16 bits)
-var int ENCODERCOUNTS_T		= 500;						# Counts per cycle
+var int ENCODERCOUNTS_T		= 500*4;						# Counts per cycle
 var double GEARBOX_LOWER 	= 2.0/5.0; 						# Motor to drive train
 var double GEARBOX_UPPER 	= 3.0/13.0; 					# Motor to drive train
 var double METER2RAD		= 500.0*TWOPI;				# translation to rotation (rad/m)
@@ -142,28 +120,24 @@ loadComponent("TORSO_ReadEncoders","SOEM::ReadEncoders")
 addPeer("Supervisor","TORSO_ReadEncoders")
 setActivity("TORSO_ReadEncoders",Ts,HighestPriority,ORO_SCHED_RT)
 TORSO_ReadEncoders.encoderbits = ENCODERBITS_T
-#TORSO_ReadEncoders.enc2SI = array(1.0, 1.0); 
 TORSO_ReadEncoders.enc2SI = ENC2METER; 
 TORSO_ReadEncoders.configure
 
 connect (TORSO_SLAVE_1+".encoder1","TORSO_ReadEncoders.enc1_in", ConnPolicy() )
 connect (TORSO_SLAVE_1+".encoder2","TORSO_ReadEncoders.enc2_in", ConnPolicy() )
 
-#### READ_CALIPHERS ###
+#### READ_CALIPHERS ### TODO: remove when torso controller is finished
 loadComponent("CaliphersIn","SOEM::AnalogInsGeneric");
 addPeer("Supervisor","CaliphersIn")
-CaliphersIn.numberofinports = 1;
-CaliphersIn.input_sizes = array(2.0)
-CaliphersIn.numberofoutports = 2;
-CaliphersIn.output_sizes = array(1.0, 1.0); 
-CaliphersIn.input_positions = array(1.0, 1.0)
-CaliphersIn.direct_to_ROS = true
+CaliphersIn.inport_dimensions = array(2.0);
+CaliphersIn.outport_dimensions = array(2.0);
+CaliphersIn.from_which_inport = array(1.0, 1.0);
+CaliphersIn.from_which_entry = array(1.0, 2.0);
 CaliphersIn.configure
 setActivity("CaliphersIn",1.0,HighestPriority,ORO_SCHED_RT)
 
-connect (TORSO_SLAVE_1 +".caliphers", "CaliphersIn.in1", ConnPolicy() );
-stream("CaliphersIn.outmsg1", ros.topic(ROBOT+"/calipher1"))
-stream("CaliphersIn.outmsg2", ros.topic(ROBOT+"/calipher2"))
+connect (TORSO_SLAVE_1 +".caliphers", "CaliphersIn.beckhoffmsg_in_1", ConnPolicy() );
+stream("CaliphersIn.rosmsg_out_1", ros.topic(ROBOT+"/caliphers"))
 
 
 #### START COMPONENTS ####
@@ -172,6 +146,5 @@ Supervisor.AddAllwaysOnPeer ("BASE_ReadEncoders")
 Supervisor.AddAllwaysOnPeer ("TORSO_ReadEncoders")
 Supervisor.AddAllwaysOnPeer ("CaliphersIn")
 Supervisor.AddAllwaysOnPeer ("AnalogIns")
-Supervisor.AddAllwaysOnPeer ("AnalogInsFToRos")
 Supervisor.AddAllwaysOnPeer ("EmergencyToRos")
 Supervisor.start()

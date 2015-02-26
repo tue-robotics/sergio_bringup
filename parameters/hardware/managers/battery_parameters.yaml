@@ -1,9 +1,9 @@
-low_power_margin_ch1: 7.0
-high_power_margin_ch1: 9.0
-low_power_margin_ch2: 7.0
-high_power_margin_ch2: 8.0
-nominal_power: 7.5
-conversion_factor: 3.29
+low_power_margin_ch1: 9.0
+high_power_margin_ch1: 11.60
+low_power_margin_ch2: 9.0
+high_power_margin_ch2: 10.28
+nominal_power: 9.50
+conversion_factor: 10.46
 alarm_period: 60.0
 max_alarms: 3
 fuse_subs:

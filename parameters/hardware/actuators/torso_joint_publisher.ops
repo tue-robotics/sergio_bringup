@@ -1,0 +1,152 @@
+########################################################################
+#                                                                      #
+# Torso Controller deployer file. deployer file.                	   #
+#                                                                      #
+# Generic Structure	by Ton Peters				                       #
+# September 2014                                                       #
+#                                                                      #
+########################################################################
+
+# TODO
+#	- move init spindle to soem.ops
+#	- move jointstateaggregator to soem.ops
+
+#### DECLARATION OF PARAMETERS ####
+# Global parameters
+var double Ts 			= 0.001
+var int BODYNUMBER 			= 2
+var string BODYPARTNAME 	= "spindle"
+var bool HOMEABLE 			= false
+var bool HOMINGMANDATORY	= false
+var bool RESETTABLE			= true
+
+var string 	TORSO_SLAVE_1 	= os.getenv("TORSO_SLAVE_1"); # torso motors
+var string 	TORSO_SLAVE_2 	= os.getenv("TORSO_SLAVE_2"); # torso beckhoff digital outs
+var string 	TORSO_SLAVE_3 	= os.getenv("TORSO_SLAVE_3"); # torso beckhoff dynamixel
+var string  ROBOT 			= "/sergio";
+
+# Motor, gearbox and encoder specs
+var double 	TWOPI 			= 2.0*3.141592
+var int ENCODERBITS 		= 65536;					# Max encoderbits (16 bits)
+var int ENCODERCOUNTS		= 500*4;						# Counts per cycle
+var double GEARBOX_LOWER 	= 2.0/5.0; 						# Motor to drive train
+var double GEARBOX_UPPER 	= 3.0/13.0; 					# Motor to drive train
+var double METER2RAD		= 500.0*TWOPI;				# translation to rotation (rad/m)
+var array ENC2METER			= array(TWOPI/ENCODERCOUNTS*GEARBOX_LOWER/METER2RAD, 
+								TWOPI/ENCODERCOUNTS*GEARBOX_UPPER/METER2RAD);
+var int NBITS 				= 8; 						# number of bits to the backhoff stack (Brake)
+var array SI2BITS 			= array(-1.0,-1.0);
+#var array VOLT2BITS 		= array(-5.0/1023.0, -5.0/1023.0) 
+var array VOLT2BITS 		= array(-1023.0/5.0, -1023.0/5.0) 
+var array OFFSET_CALIPHERS 	= array(-0.22986, -0.22312);
+
+    # Refrence generator
+var int N_JOINTS                = 2;
+var strings JOINT_NAMES         = strings( "ankle_joint","knee_joint","hip_joint" )
+var array MINPOS                = array(0.25877, 0.360); # min spindle length [m]
+# Note, min spindle 1 length can be 0.244, increased because of safety reasons.
+var array MAXPOS                = array(0.394, 0.456); # max spindle length [m]
+var array MAXVEL                = array(0.024, 0.024); # spindle vel [m/s] (6 and 4 secs. over full range)
+var array MAXACC                = array(0.037, 0.024);   # spindle acc [m/s2] (1 sec to full speed)
+var double LEGS_ENDSTOP			=  0.25117; # extra endstop safety legs
+
+    # Safety
+var int     N_MOTORS            = 2;                # number of motors
+var array   MAX_ERRORS          = array (0.05, 0.05); 
+var array   MAX_OUTPUT          = array (1000.0, 1000.0);
+var double  MAX_SATURATION_TIME = 2.0;
+
+# Cotroller parameters
+
+ # from bode 
+var strings CONTROLLERS                 = strings ("LeadLag","WeakIntegrator")
+#var array 	GAINS 						= array (15344996.0, 22165000.0); # position to volt
+var array 	GAINS 						= array (366.5688194020424, 529.4884327142393); # position to volt
+# var array   GAINS                       = array (0.03, 0.025); # encoder to bits
+var array   INTEGRATOR_ZERO_FREQUENCY   = array (2.0, 2.0)
+var array   LEAD_FREQUENCY              = array (3.33, 3.33)
+var array   LAG_FREQUENCY               = array (30.0, 30.0)
+
+### Loading Components ###
+
+### ENCODER CALIBRATION COMPONENT ###
+loadComponent("TORSO_InitEncoder", "SERGIOCUSTOM::InitCalipherToSpindle")
+addPeer("Supervisor", "TORSO_InitEncoder")
+setActivity("TORSO_InitEncoder",0.1,LowestPriority,ORO_SCHED_OTHER)
+TORSO_InitEncoder.offset_caliphers = OFFSET_CALIPHERS;
+TORSO_InitEncoder.configure
+
+### CONVERT SPINDLE LENGTH TO JOINT ANGLES ###
+loadComponent("TORSO_ENCSpindleToAngle","SERGIOCUSTOM::ConversionSpindleAngle")
+addPeer("Supervisor","TORSO_ENCSpindleToAngle")
+setActivity("TORSO_ENCSpindleToAngle",0.01,LowestPriority,ORO_SCHED_OTHER)
+TORSO_ENCSpindleToAngle.spindle_to_angle 	= true
+TORSO_ENCSpindleToAngle.output_joint_states = true
+TORSO_ENCSpindleToAngle.JointNames 			= JOINT_NAMES
+TORSO_ENCSpindleToAngle.configure
+
+######################################################
+############  Start Used for testing #################  
+
+# Encoder to ros
+loadComponent("TORSO_ENCToRos","ROS::DoublesToROS")
+addPeer("Supervisor","TORSO_ENCToRos")
+setActivity("TORSO_ENCToRos",0.25,LowestPriority,ORO_SCHED_OTHER)
+TORSO_ENCToRos.NumberOfDoublesInVector = 2;
+TORSO_ENCToRos.configure
+
+# Digital outs false
+loadComponent("TORSO_False", "SOURCES::ConstantBool")
+addPeer("Supervisor", "TORSO_False")
+setActivity("TORSO_False", Ts, HighestPriority, ORO_SCHED_RT)
+TORSO_False.value = false;
+TORSO_False.configure
+
+# disable torso
+#connect ("TORSO_False.out","TORSO_EnableDO.in1", ConnPolicy() )
+#connect ("TORSO_False.out","TORSO_BrakeDO.in1", ConnPolicy() )
+#connect ("TORSO_False.out","TORSO_EnableDO.in2", ConnPolicy() )
+#connect ("TORSO_False.out","TORSO_BrakeDO.in2", ConnPolicy() )
+connect ("TORSO_False.out",TORSO_SLAVE_1+".enablePort", ConnPolicy() )
+
+
+############  End Used for testing #################  
+####################################################
+
+
+#### CONNECT COMPONENTS ####
+
+# Initialize encoders
+connect (TORSO_SLAVE_1+".caliphers",    	"TORSO_InitEncoder.in_calipher", ConnPolicy() )
+connect ("TORSO_InitEncoder.out_reset",    	"TORSO_ReadEncoders.in_init", ConnPolicy() )
+#connect ("TORSO_InitEncoder.out_safe",    	"TORSO_Safety.calibration", ConnPolicy() )
+
+# Ros communication 
+connect( "TORSO_ReadEncoders.out", 					"TORSO_ENCSpindleToAngle.in", 			ConnPolicy() ); # Position
+stream ("TORSO_ENCSpindleToAngle.out_joints",		ros.topic(ROBOT+"/torso/measurements"));
+stream ("TORSO_ENCSpindleToAngle.out_joints",		ros.topic(ROBOT+"/joint_states"));
+
+######################################################
+############  Start Used for testing #################  
+# data to ros
+connect ("TORSO_ReadEncoders.out","TORSO_ENCToRos.in", ConnPolicy() )
+stream ("TORSO_ENCToRos.out1", ros.topic("/sergio/torso/enc_1"));
+stream ("TORSO_ENCToRos.out2", ros.topic("/sergio/torso/enc_2"));
+############  End Used for testing #################  
+####################################################
+
+#### START COMPONENTS ####
+# initialize encoders
+Supervisor.AddAllwaysOnPeer("TORSO_InitEncoder")
+Supervisor.AddAllwaysOnPeer("TORSO_ENCSpindleToAngle")
+
+
+######################################################
+############  Start Used for testing #################  
+# dataflow to ros
+Supervisor.AddAllwaysOnPeer("TORSO_ENCToRos")
+# bool false
+Supervisor.AddAllwaysOnPeer("TORSO_False")
+############  End Used for testing #################  
+####################################################
+

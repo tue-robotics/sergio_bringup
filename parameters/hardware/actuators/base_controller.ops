@@ -314,7 +314,7 @@ connect ("BASE_SI2Bits.out", 			"BASE_Diagnostics.vec3", ConnPolicy() )
 stream ("BASE_Diagnostics.diagnostics", ros.topic("/sergio/base_diagnostics"));
 
 # Thermal sensor
-connect ("AnalogIns.out2", "BASE_ThermalSensor.in", ConnPolicy() )
+connect ("AnalogIns.stdvect_out_2", "BASE_ThermalSensor.in", ConnPolicy() )
 connect ("BASE_ThermalSensor.out", "BASE_ThermalToROS.in", ConnPolicy() )
 stream("BASE_ThermalToROS.out1", ros.topic("/sergio/base/temperature"))
 
