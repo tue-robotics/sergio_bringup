@@ -45,7 +45,7 @@ plugins:
 
 # Ed World model layer
 ed_occupancy_grid:
-    map_topic: /sergio/ed_map
+    map_topic: /sergio/ed/navigation/map
     track_unknown_space: true
     use_maximum: true
     lethal_cost_threshold: 99
