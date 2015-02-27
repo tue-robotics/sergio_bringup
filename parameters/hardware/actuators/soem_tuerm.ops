@@ -1,0 +1,54 @@
+########################################################################
+#                                                                      #
+# Simple Open EtherCAT Master (SOEM) deployer file 				   	   #
+#                                                                      #
+########################################################################
+
+#### IMPORT PACKAGE ####
+import("rtt_ros")
+ros.import("sergio_hardware")
+
+#### DECLARATION OF PARAMETERS ####
+var double 	Ts = 0.001
+var string LEFT_ARM_SHOULDER 	= "Soem.Slave_1012"
+var string LEFT_ARM_UPPERARM 	= "Soem.Slave_1013"
+var string LEFT_ARM_LOWERARM 	= "Soem.Slave_1014"
+var string  ROBOT 				= "/sergio";
+
+#### MAKING PARAMETERS GLOBAL ####
+loadService("HARDWARE","os")
+os.setenv("LEFT_ARM_SHOULDER",	LEFT_ARM_SHOULDER)
+os.setenv("LEFT_ARM_UPPERARM",	LEFT_ARM_UPPERARM)
+os.setenv("LEFT_ARM_LOWERARM",	LEFT_ARM_LOWERARM)
+os.setenv("ROBOT",	ROBOT)
+
+#### LOAD SUPERVISOR ###
+# TODO correct ports if dashboard is adjusted
+loadComponent("Supervisor","SUPERVISORY::Supervisor")
+Supervisor.ebuttonorder	= strings("Wireless","Wired","Endswitch","Reset")
+Supervisor.configure
+setActivity("Supervisor",0.04,LowestPriority,ORO_SCHED_OTHER)
+stream("Supervisor.ebuttonWireless", ros.topic(ROBOT+"/ebuttonWireless"));
+stream("Supervisor.ebuttonWired", ros.topic(ROBOT+"/ebuttonWired"));
+stream("Supervisor.ebuttonEndswitch", ros.topic(ROBOT+"/ebuttonEndswitch"));
+stream("Supervisor.ebuttonReset", ros.topic(ROBOT+"/ebuttonReset"));
+stream("Supervisor.rosshutdown", ros.topic(ROBOT+"/etherCAT_shutdown")); 
+stream("Supervisor.rosetherCATenabled", ros.topic(ROBOT+"/etherCAT_enabled")); 
+stream("Supervisor.hardware_status", ros.topic(ROBOT+"/hardware_status")); 
+stream("Supervisor.dashboardCmd", ros.topic(ROBOT+"/dashboard_ctrlcmds")); 
+stream("Supervisor.ebutton_status", ros.topic(ROBOT+"/ebutton_status"));
+
+#### Create Robot Object ####
+var strings DEFAULT_PART_NAMES = strings("left_arm");
+Supervisor.CreateRobotObject("sergio", DEFAULT_PART_NAMES)
+
+### LOAD SOEM COMPONENT FOR ETHERCAT COMMUNICATION ###
+loadComponent("Soem","soem_master::SoemMasterComponent")
+addPeer("Supervisor","Soem")
+Soem.configure
+setActivity("Soem",Ts,HighestPriority,ORO_SCHED_RT)
+connect ("Soem.Slave_1001.encoder1", "Supervisor.serialRunning", ConnPolicy() ) ;
+
+#### START COMPONENTS ####
+Supervisor.AddAllwaysOnPeer ("Soem")
+Supervisor.start()

@@ -1,0 +1,13 @@
+#########################################################################
+#																		#
+# Left TU Eindhoven Robotic Manipulator deployer file.					#
+#																		#
+# Max Baeten															#
+#																		#
+#########################################################################
+
+#### DECLARATION OF PARAMETERS ####
+var double TS 					= 0.001
+var string LEFT_ARM_SHOULDER 	= os.getenv("LEFT_ARM_SHOULDER")
+var string LEFT_ARM_UPPERARM 	= os.getenv("LEFT_ARM_UPPERARM")
+var string LEFT_ARM_LOWERARM 	= os.getenv("LEFT_ARM_LOWERARM")
