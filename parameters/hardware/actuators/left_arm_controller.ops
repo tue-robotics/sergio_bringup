@@ -11,3 +11,190 @@ var double TS 					= 0.001
 var string LEFT_ARM_SHOULDER 	= os.getenv("LEFT_ARM_SHOULDER")
 var string LEFT_ARM_UPPERARM 	= os.getenv("LEFT_ARM_UPPERARM")
 var string LEFT_ARM_LOWERARM 	= os.getenv("LEFT_ARM_LOWERARM")
+
+var strings JOINT_NAMES 		= strings( "shoulder_yaw_joint_left", "shoulder_pitch_joint_left", "shoulder_roll_joint_left", "elbow_pitch_joint_left", "elbow_roll_joint_left", "wrist_pitch_joint_left", "wrist_yaw_joint_left" )
+var strings DUMMY_JOINT_NAMES 	= strings( "finger1_joint_left", "finger1_tip_joint_left", "finger2_joint_left", "finger2_tip_joint_left" )
+var array UPPERJOINTLIMIT 		= array (	0.0,		1.57,		1.57, 		2.23,  		1.83, 		0.95,  		0.61)
+var array LOWERJOINTLIMIT 		= array (	-1.57,		-1.57,		-1.57,  	0.0, 		-1.83,		-0.95, 		-0.61)
+var array MAXACC 				= array (	0.2, 		0.2, 		0.3, 		0.5, 		0.5, 		0.5, 		0.5)
+var array MAXVEL 				= array (	0.4, 		0.4, 		0.6, 		0.8, 		0.8, 		1.0, 		1.0)
+var double TWOPI 				= 2.0*3.141592
+var double GR_SM				= (2057.0/204687.0)	* (20.0/60.0)
+var double GR_S3				= (3179.0/226223.0)	* (24.0/90.0)
+var double GR_EM				= (121.0/3249.0)	* (1.0/15.0); # check with Peter Minten
+var double GR_WM				= (4.0/15.0)		* 1.0; # check with Peter Minten
+var double ENCCNTS_SM			= 4.0*500.0
+var double ENCCNTS_S3			= 4.0*500.0
+var double ENCCNTS_EM			= 4.0*500.0
+var double ENCCNTS_WM			= 4.0*512.0
+var double ENC2SI_SM			= TWOPI*GR_SM/ENCCNTS_SM
+var double ENC2SI_S3			= TWOPI*GR_S3/ENCCNTS_S3
+var double ENC2SI_EM			= TWOPI*GR_EM/ENCCNTS_EM
+var double ENC2SI_WM			= TWOPI*GR_WM/ENCCNTS_WM
+var double KE_SM  				= 0.0259
+var double KE_S3  				= 0.0259
+var double KE_EM  				= 0.0208
+var double KE_WM  				= 0.0244
+var double RA_SM				= 0.611
+var double RA_S3				= 0.611
+var double RA_EM				= 2.32
+var double RA_WM				= 21.5
+var double VOLT2PWM				= 1000.0/24.0
+var int N						= 7
+var int BODYNUMBER 				= 3
+var string BODYPARTNAME 		= "left_arm"
+var bool HOMEABLE 				= false
+var bool HOMINGOBLIGATORY		= false
+var bool RESETTABLE				= false
+
+### AddBodyPart ###
+Supervisor.AddBodyPart( BODYNUMBER, BODYPARTNAME, HOMEABLE, HOMINGOBLIGATORY, RESETTABLE)
+
+########################################################################
+
+### LOAD READENCODERS
+loadComponent("LTUERM_ReadEncoders","SOEM::ReadEncoders")
+addPeer("Supervisor","LTUERM_ReadEncoders")
+setActivity("LTUERM_ReadEncoders",TS,HighestPriority,ORO_SCHED_RT)
+LTUERM_ReadEncoders.encoderbits 				= 65536
+LTUERM_ReadEncoders.enc2SI 					= array (ENC2SI_SM ,ENC2SI_SM, ENC2SI_S3 , ENC2SI_EM , ENC2SI_EM , ENC2SI_WM , ENC2SI_WM)
+LTUERM_ReadEncoders.configure
+
+### Motor to joint angles ###
+loadComponent("LTUERM_MotorToJointSpace","MATH::MatrixTransform")
+addPeer("Supervisor","LTUERM_MotorToJointSpace")
+setActivity("LTUERM_MotorToJointSpace",0.0,HighestPriority,ORO_SCHED_RT)
+LTUERM_MotorToJointSpace.Nrows 				= N
+LTUERM_MotorToJointSpace.Ncolumns			= N
+LTUERM_MotorToJointSpace.configure
+LTUERM_MotorToJointSpace.function1 			= array  ( 0.5, -0.5,  0.0,  0.0,  0.0,  0.0,  0.0)
+LTUERM_MotorToJointSpace.function2 			= array  (-0.5, -0.5,  0.0,  0.0,  0.0,  0.0,  0.0)
+LTUERM_MotorToJointSpace.function3 			= array  ( 0.0,  0.0, -1.0,  0.0,  0.0,  0.0,  0.0)
+LTUERM_MotorToJointSpace.function4 			= array  ( 0.0,  0.0,  0.0,  0.5,  0.5,  0.0,  0.0)
+LTUERM_MotorToJointSpace.function5 			= array  ( 0.0,  0.0,  0.0,  0.5, -0.5,  0.0,  0.0)
+LTUERM_MotorToJointSpace.function6 			= array  ( 0.0,  0.0,  0.0,  0.0,  0.0,  1.0,  0.0)
+LTUERM_MotorToJointSpace.function7 			= array  ( 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  1.0)
+
+### Interpolator ###
+loadComponent("LTUERM_ReferenceGenerator","SOURCES::ReferenceGenerator")
+addPeer("Supervisor","LTUERM_ReferenceGenerator")
+setActivity("LTUERM_ReferenceGenerator",TS,HighestPriority,ORO_SCHED_RT)
+LTUERM_ReferenceGenerator.vector_size 		= N
+LTUERM_ReferenceGenerator.number_of_inports 	= 1
+LTUERM_ReferenceGenerator.inport_sizes 		= ints (N)
+LTUERM_ReferenceGenerator.InterpolatorDt 	= TS
+LTUERM_ReferenceGenerator.InterpolatorEps 	= 1.0
+LTUERM_ReferenceGenerator.minPosition		= LOWERJOINTLIMIT
+LTUERM_ReferenceGenerator.maxPosition		= UPPERJOINTLIMIT
+LTUERM_ReferenceGenerator.maxVelocity		= MAXVEL
+LTUERM_ReferenceGenerator.maxAcceleration	= MAXACC
+LTUERM_ReferenceGenerator.configure
+
+### Joint to motor torques ###
+loadComponent("LTUERM_JointToMotorSpace","MATH::MatrixTransform")
+addPeer("Supervisor","LTUERM_JointToMotorSpace")
+setActivity("LTUERM_JointToMotorSpace",0.0,HighestPriority,ORO_SCHED_RT)
+LTUERM_JointToMotorSpace.Nrows 				= N
+LTUERM_JointToMotorSpace.Ncolumns 			= N
+LTUERM_JointToMotorSpace.configure
+LTUERM_JointToMotorSpace.function1			= array ( 0.5, -0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0)
+LTUERM_JointToMotorSpace.function2			= array (-0.5, -0.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0)
+LTUERM_JointToMotorSpace.function3 			= array ( 0.0,  0.0, -1.0,  0.0,  0.0,  0.0,  0.0,  0.0)
+LTUERM_JointToMotorSpace.function4 			= array ( 0.0,  0.0,  0.0,  0.5,  0.5,  0.0,  0.0,  0.0)
+LTUERM_JointToMotorSpace.function5 			= array ( 0.0,  0.0,  0.0,  0.5, -0.5,  0.0,  0.0,  0.0)
+LTUERM_JointToMotorSpace.function6 			= array ( 0.0,  0.0,  0.0,  0.0,  0.0,  0.5,  0.5,  0.0)
+LTUERM_JointToMotorSpace.function7 			= array ( 0.0,  0.0,  0.0,  0.0,  0.0,  0.5, -0.5,  0.0)
+LTUERM_JointToMotorSpace.function8 			= array ( 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  1.0)
+	
+### Negative feedback controller ###
+loadComponent("LTUERM_Controller","FILTERS::Controller")
+setActivity("LTUERM_Controller",0.0,HighestPriority,ORO_SCHED_RT)
+addPeer("Supervisor","LTUERM_Controller")
+LTUERM_Controller.vector_size    			= N
+LTUERM_Controller.controllers				= strings("WeakIntegrator","LeadLag","LowPass")
+LTUERM_Controller.sampling_time				= TS
+LTUERM_Controller.number_of_refports			= 1
+LTUERM_Controller.refinport_sizes			= ints (N)
+LTUERM_Controller.number_of_ffwports			= 0
+LTUERM_Controller.gains						= array(20000.0, 	20000.0, 	10000.0, 	17500.0, 	17500.0, 	17500.0, 	21500.0, 	5000.0);
+LTUERM_Controller.zero_freq_WeakIntegrator	= array(0.0065,	  	0.0065,		0.009, 		0.004, 		0.004, 		0.02, 		0.02, 		0.000001); 
+LTUERM_Controller.zero_freq_LeadLag			= array(25.0, 		25.0, 		15.0, 		100.0, 		100.0,		5.0,  		5.0,  		4.5)
+LTUERM_Controller.pole_freq_LeadLag			= array(80.0, 		80.0, 		40.0, 		200.0, 		200.0, 		40.0, 		40.0, 		45.0)
+LTUERM_Controller.pole_freq_LowPass			= array(125.0, 		125.0, 		125.0, 		125.0, 		62.5, 		125.0, 		125.0, 		125.0)
+LTUERM_Controller.pole_damp_LowPass			= array(0.7, 		0.7, 		0.7, 		0.7, 		0.7, 		0.7, 		0.7, 		0.7)
+LTUERM_Controller.configure
+
+loadComponent("LTUERM_CUR2VOLT","FORCECONTROL::Current2VoltageFFW")
+addPeer("Supervisor","LTUERM_CUR2VOLT")
+setActivity("LTUERM_CUR2VOLT",TS,HighestPriority,ORO_SCHED_RT)
+LTUERM_CUR2VOLT.TS 							= TS
+LTUERM_CUR2VOLT.vector_size					= N
+LTUERM_CUR2VOLT.KE							= array (		KE_SM,      	KE_SM,      	KE_S3,      	KE_EM,      	KE_EM,      	KE_WM,      	KE_WM,      	KE_HM       )
+LTUERM_CUR2VOLT.GR 							= array (		GR_SM,      	GR_SM,      	GR_S3,      	GR_EM,      	GR_EM,      	GR_WM,      	GR_WM,      	GR_HM       )
+LTUERM_CUR2VOLT.RA							= array (		RA_SM,    		RA_SM,     		RA_S3,     		RA_EM,     		RA_EM,     		RA_WM,    		RA_WM,     		RA_HM  		)
+LTUERM_CUR2VOLT.Volt2PWM					= array (		VOLT2PWM,		VOLT2PWM,		VOLT2PWM,		VOLT2PWM,		VOLT2PWM,		VOLT2PWM,		VOLT2PWM,		VOLT2PWM 	)
+LTUERM_CUR2VOLT.configure
+
+### Safety ###
+loadComponent("LTUERM_Safety","SUPERVISORY::Safety")
+addPeer("Supervisor","LTUERM_Safety")
+setActivity("LTUERM_Safety",0.0,HighestPriority,ORO_SCHED_RT)
+LTUERM_Safety.NJ								= N
+LTUERM_Safety.NM								= N
+LTUERM_Safety.maxJointErrors					= MAXERRORS
+LTUERM_Safety.motorSaturations				= array (1000.0, 	1000.0,	 	400.0, 	   	500.0,  	500.0, 	   	500.0, 		500.0, 		900.0)
+LTUERM_Safety.maxConSatTime					= 5.0
+LTUERM_Safety.configure
+
+### Output limiter ###
+loadComponent("LTUERM_JointOutputLimiter","DISCONTINUITIES::Saturation")
+addPeer("Supervisor","LTUERM_JointOutputLimiter")
+setActivity("LTUERM_JointOutputLimiter",0.0,HighestPriority,ORO_SCHED_RT)
+LTUERM_JointOutputLimiter.vector_size 		= N
+LTUERM_JointOutputLimiter.upper_limit 		= UPPERJOINTLIMIT
+LTUERM_JointOutputLimiter.lower_limit 		= LOWERJOINTLIMIT
+LTUERM_JointOutputLimiter.configure
+
+### Publishing joint angles on ROS-topic ###
+loadComponent("LTUERM_WriteClippedJointAngles","ROS::DoublesToJointState")
+addPeer("Supervisor","LTUERM_WriteClippedJointAngles")
+setActivity("LTUERM_WriteClippedJointAngles",0.05,LowestPriority,ORO_SCHED_OTHER)
+LTUERM_WriteClippedJointAngles.JointNames 	= JOINT_NAMES
+LTUERM_WriteClippedJointAngles.configure
+
+####				CONNECTING COMPONENTS							####
+
+## Control Loop
+connect (LEFT_ARM_SHOULDER+".encoder1",				"LTUERM_ReadEncoders.enc1_in", 				ConnPolicy() ); # Enc 1
+connect (LEFT_ARM_SHOULDER+".encoder2",				"LTUERM_ReadEncoders.enc2_in", 				ConnPolicy() ); # Enc 2
+connect (LEFT_ARM_UPPERARM+".encoder1",				"LTUERM_ReadEncoders.enc3_in", 				ConnPolicy() ); # Enc 3
+connect (LEFT_ARM_UPPERARM+".encoder2",				"LTUERM_ReadEncoders.enc4_in", 				ConnPolicy() ); # Enc 4
+connect (LEFT_ARM_UPPERARM+".encoder3",				"LTUERM_ReadEncoders.enc5_in", 				ConnPolicy() ); # Enc 5
+connect (LEFT_ARM_LOWERARM+".encoder1",				"LTUERM_ReadEncoders.enc6_in", 				ConnPolicy() ); # Enc 6
+connect (LEFT_ARM_LOWERARM+".encoder2",				"LTUERM_ReadEncoders.enc7_in", 				ConnPolicy() ); # Enc 7
+connect ("LTUERM_ReadEncoders.out",					"LTUERM_Controller.pos_in",	 				ConnPolicy() ); # Pos MS
+connect ("LTUERM_Controller.out",					"LTUERM_AnalogOuts.in1", 					ConnPolicy() ); # Con Eff
+
+## Safety
+connect ("LTUERM_Controller.jointErrors",			"LTUERM_Safety.jointErrors", 				ConnPolicy() ); # Err
+connect ("LTUERM_Controller.out",					"LTUERM_Safety.controlEffort", 				ConnPolicy() ); # Con Eff
+connect ("LTUERM_Safety.enable",					"LTUERM_Controller.enable", 				ConnPolicy() ); # En
+connect ("LTUERM_Safety.error",						"Supervisor.left_arm_error", 				ConnPolicy() ); # Err
+connect ("LTUERM_Safety.enable",					LEFT_ARM_SHOULDER+".enablePort", 			ConnPolicy() ); # En
+connect ("LTUERM_Safety.enable",					LEFT_ARM_UPPERARM+".enablePort", 			ConnPolicy() ); # En
+connect ("LTUERM_Safety.enable",					LEFT_ARM_LOWERARM+".enablePort", 			ConnPolicy() ); # En
+
+####				CONNECTING ROS STREAMS							####
+stream ("LTUERM_WriteJointAngles.out", 				ros.topic("/sergio/left_arm/measurements")) 
+
+####				STARTING COMPONENTS								####
+Supervisor.AddAllwaysOnPeer(	"LTUERM_ReadEncoders")
+Supervisor.AddAllwaysOnPeer(	"LTUERM_JointOutputLimiter")
+Supervisor.AddAllwaysOnPeer(	"LTUERM_WriteClippedJointAngles")
+Supervisor.AddAllwaysOnPeer(	"LTUERM_MotorToJointSpace")
+Supervisor.AddAllwaysOnPeer(	"LTUERM_JointToMotorSpace")
+Supervisor.AddAllwaysOnPeer(	"LTUERM_Controller")
+Supervisor.AddAllwaysOnPeer(	"LTUERM_CUR2VOLT")
+
+Supervisor.AddEnabledPeer(		"LTUERM_ReferenceGenerator", 	BODYNUMBER)
+Supervisor.AddEnabledPeer(		"LTUERM_Safety", 				BODYNUMBER)

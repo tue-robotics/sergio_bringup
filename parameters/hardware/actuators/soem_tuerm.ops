@@ -10,9 +10,9 @@ ros.import("sergio_hardware")
 
 #### DECLARATION OF PARAMETERS ####
 var double 	Ts = 0.001
-var string LEFT_ARM_SHOULDER 	= "Soem.Slave_1012"
-var string LEFT_ARM_UPPERARM 	= "Soem.Slave_1013"
-var string LEFT_ARM_LOWERARM 	= "Soem.Slave_1014"
+var string LEFT_ARM_SHOULDER 	= "Soem.Slave_1002"
+var string LEFT_ARM_UPPERARM 	= "Soem.Slave_1003"
+var string LEFT_ARM_LOWERARM 	= "Soem.Slave_1004"
 var string  ROBOT 				= "/sergio";
 
 #### MAKING PARAMETERS GLOBAL ####
@@ -47,8 +47,23 @@ loadComponent("Soem","soem_master::SoemMasterComponent")
 addPeer("Supervisor","Soem")
 Soem.configure
 setActivity("Soem",Ts,HighestPriority,ORO_SCHED_RT)
-connect ("Soem.Slave_1001.encoder1", "Supervisor.serialRunning", ConnPolicy() ) ;
+connect ("Soem.Slave_1002.encoder1", "Supervisor.serialRunning", ConnPolicy() ) ;
+
+#### LOAD COMPONENT TO ENABLE ANALOG OUTS PERA ###
+loadComponent("LTUERM_AnalogOuts","SOEM::AnalogOutsGeneric")
+addPeer("Supervisor","LTUERM_AnalogOuts")
+setActivity("LTUERM_AnalogOuts",0.0,HighestPriority,ORO_SCHED_RT)
+LTUERM_AnalogOuts.numberofinports    				= 1
+LTUERM_AnalogOuts.numberofoutports    				= 3
+LTUERM_AnalogOuts.input_sizes 						= array (7.0)
+LTUERM_AnalogOuts.output_sizes 						= array (3.0, 3.0, 3.0)
+LTUERM_AnalogOuts.output_positions 					= array (1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0)
+LTUERM_AnalogOuts.configure
+connect ("LTUERM_AnalogOuts.out1",LEFT_ARM_SHOULDER+".pwmDutyMotors", ConnPolicy() );
+connect ("LTUERM_AnalogOuts.out2",LEFT_ARM_UPPERARM+".pwmDutyMotors", ConnPolicy() );
+connect ("LTUERM_AnalogOuts.out3",LEFT_ARM_LOWERARM+".pwmDutyMotors", ConnPolicy() );
 
 #### START COMPONENTS ####
 Supervisor.AddAllwaysOnPeer ("Soem")
+Supervisor.AddAllwaysOnPeer ("LTUERM_AnalogOuts")
 Supervisor.start()
