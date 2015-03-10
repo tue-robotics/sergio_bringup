@@ -72,8 +72,8 @@ connect ("DYNAMIXEL_Controller.errortosupervisor","Supervisor.head_error", ConnP
 connect ("DYNAMIXEL_Enabler.out","DYNAMIXEL_Controller.enabler", ConnPolicy() )
 
 #### CONNECT ROS STREAMS ####
-stream( "DYNAMIXEL_Controller.goalPos", ros.topic(ROBOT+"/dynamixel/references"))
-stream( "DYNAMIXEL_Controller.currentPos", ros.topic(ROBOT+"/dynamixel/measurements"))
+stream( "DYNAMIXEL_Controller.goalPos", ros.topic(ROBOT+"/neck/references"))
+stream( "DYNAMIXEL_Controller.currentPos", ros.topic(ROBOT+"/neck/measurements"))
 stream( "DYNAMIXEL_Controller.currentPos", ros.topic(ROBOT+"/joint_states"))
 
 #### START COMPONENTS ####
