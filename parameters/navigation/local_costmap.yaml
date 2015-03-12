@@ -32,7 +32,7 @@ plugins:
     - {name: unknown_free_space,                type: "costmap_2d::ObstacleLayer"}
 
     # Free space inflation
-    - {name: free_space_inflation,              type: "costmap_2d::InflationLayer"}
+    #- {name: free_space_inflation,              type: "costmap_2d::InflationLayer"}
 
     # Clear the robot footprint
     - {name: robot_footprint,                   type: "costmap_2d::FootprintLayer"}
