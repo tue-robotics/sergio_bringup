@@ -31,6 +31,10 @@
         <include file="$(find robot_launch_files)/launch/world_modeling/world_model.launch">
             <arg name="machine" value="sergio3"/>
         </include> 
+        
+        <include file="$(find robot_launch_files)/launch/world_modeling/reasoner.launch">
+            <arg name="machine" value="sergio3"/>
+        </include> 
 
         <!-- SPEECH RECOGNITION -->
         <include file="$(find robot_launch_files)/launch/interaction/speech_recognition.launch">
