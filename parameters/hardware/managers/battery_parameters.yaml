@@ -1,11 +1,16 @@
-low_power_margin_ch1: 9.0
-high_power_margin_ch1: 11.60
-low_power_margin_ch2: 9.0
-high_power_margin_ch2: 10.28
-nominal_power: 9.50
-conversion_factor: 10.46
-alarm_period: 60.0
-max_alarms: 3
+#low_power_margin_ch1: 9.0
+#high_power_margin_ch1: 11.60
+#low_power_margin_ch2: 9.0
+#high_power_margin_ch2: 10.28
+#nominal_power: 9.50
+conversion_factor: 10.67
+#alarm_period: 60.0
+#max_alarms: 3
+max_voltage: 30.0
+warn_voltage: 23.0
+min_voltage: 21.0
+full_voltage: 27.0
+empty_voltage: 22.0
 fuse_subs:
 - fuse1
 - fuse2
