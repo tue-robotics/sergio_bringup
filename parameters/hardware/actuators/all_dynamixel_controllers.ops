@@ -16,30 +16,34 @@ var bool RESETTABLE			= false
 var string DYNAMIXEL_SLAVE	= os.getenv("TORSO_SLAVE_3");
 var string ROBOT 			= "/sergio"
 
+# on AMIGO AX-12
+#var double RAD_TO_STEP 	= 195.37860814; # IF YOU CHANGE THIS VARIABLE, ALSO RECALCULATE PAN_MIN, PAN_MAX, TILT_MIN AND TILT_MAX, (From header file) 
+# on SERGIO RX-64
+var double RAD_TO_STEP 	= 190.9859; # IF YOU CHANGE THIS VARIABLE, ALSO RECALCULATE PAN_MIN, PAN_MAX, TILT_MIN AND TILT_MAX, (From header file) 
 
-var double RAD_TO_STEP 	= 195.37860814; # IF YOU CHANGE THIS VARIABLE, ALSO RECALCULATE PAN_MIN, PAN_MAX, TILT_MIN AND TILT_MAX, (From header file) 
+
 
 var strings JOINT_NAMES = strings( "neck_pan_joint", "neck_tilt_joint", "laser_tilt_joint" )
 
 # head pan joint  					(range 164~770)
 var int PAN_ID 			= 1 ; 		# Dynamixel id
 var int PAN_OFFSET 		= 467; 		# Center pan dynamixel
-var int PAN_MIN 		= -303; 	# -1.545*RAD_TO_STEP
-var int PAN_MAX 		= 303; 		#  1.545*RAD_TO_STEP
+var int PAN_MIN 		= -303; 	# -1.586 rad
+var int PAN_MAX 		= 303; 		#  1.586 rad
 var int PAN_SPEED 		= 50;
 
 # head tilt joint					(range 190~570)
 var int TILT_ID 		= 2 ; 		# Dynamixel id
 var int TILT_OFFSET 	= 380; 		# Center tilt dynamixel
-var int TILT_MIN 		= -190; 	# -0.973 *RAD_TO_STEP
-var int TILT_MAX 		= 190; 		#  0.973*RAD_TO_STEP
+var int TILT_MIN 		= -190; 	# -0.994 rad
+var int TILT_MAX 		= 190; 		#  0.994 rad
 var int TILT_SPEED 	 	= 25;
 
 # laser tilt joint
 var int LASER_ID 		= 3 ; 		# Dynamixel id
-var int LASER_OFFSET 	= 616; 		# Center laser dynamixel (Can be changed)
-var int LASER_MIN 		= 0; 		#  0.0 *RAD_TO_STEP  (0)
-var int LASER_MAX 		= 62;	 	#  0.3173 *RAD_TO_STEP  (62)
+var int LASER_OFFSET 	= 620; 		# Center laser dynamixel (Can be changed)
+var int LASER_MIN 		= -4; 		# -0.0209 rad
+var int LASER_MAX 		= 58;	 	#  0.3037 rad
 var int LASER_SPEED 	= 25;
 
 ### AddBodyPart ###
