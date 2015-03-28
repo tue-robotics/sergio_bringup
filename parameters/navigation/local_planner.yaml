@@ -9,10 +9,10 @@ DWAPlannerROS:
     #### base_local_planner::LocalPlannerLimits ###
 
     # velocities
-    max_trans_vel: 0.7
+    max_trans_vel: 1.0
     min_trans_vel: 0.0
 
-    max_vel_x: 0.7
+    max_vel_x: 1.0
     min_vel_x: -0.1
    
     max_vel_y: 0.2
@@ -59,20 +59,23 @@ DWAPlannerROS:
     # Switching behavior
     switch_goal_distance: 0.3
     switch_plan_distance: 0.5
-    switch_yaw_error: 1.6
+    switch_yaw_error: 0.8
 
     # Cost functions    
     align_align_scale: 1.0
     align_plan_scale: 1.0
     align_goal_scale: 0.0
+    align_obstacle_scale: 0.1
 
     default_align_scale: 1.0
     default_plan_scale: 0.0
     default_goal_scale: 1.0
+    default_obstacle_scale: 0.01
 
     arrive_align_scale: 1.0
     arrive_plan_scale: 0.0
     arrive_goal_scale: 1.0
+    arrive_obstacle_scale: 0.01
 
     align_cmd_px:  0.0
     align_cmd_nx:  0.0
@@ -83,8 +86,8 @@ DWAPlannerROS:
     
     default_cmd_px:  0.0
     default_cmd_nx:  100.0
-    default_cmd_py:  10.0
-    default_cmd_ny:  10.0
+    default_cmd_py:  50.0
+    default_cmd_ny:  50.0
     default_cmd_pth: 0.0
     default_cmd_nth: 0.0
     
