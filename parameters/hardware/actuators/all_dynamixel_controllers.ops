@@ -41,9 +41,9 @@ var int TILT_SPEED 	 	= 25;
 
 # laser tilt joint
 var int LASER_ID 		= 3 ; 		# Dynamixel id
-var int LASER_OFFSET 	= 620; 		# Center laser dynamixel (Can be changed)
-var int LASER_MIN 		= -4; 		# -0.0209 rad
-var int LASER_MAX 		= 58;	 	#  0.3037 rad
+var int LASER_OFFSET 	= 616; 		# Center laser dynamixel 
+var int LASER_MIN 		= 0; 		#  0.0 *RAD_TO_STEP  (0)
+var int LASER_MAX 		= 62;	 	#  0.324 *RAD_TO_STEP  (62)
 var int LASER_SPEED 	= 25;
 
 ### AddBodyPart ###
