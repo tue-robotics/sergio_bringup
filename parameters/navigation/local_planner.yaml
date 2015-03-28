@@ -50,29 +50,29 @@ DWAPlannerROS:
     sim_granularity: 0.1
     angular_sim_granularity: 0.1
 
-    vx_samples: 4
-    vy_samples: 10
+    vx_samples: 6
+    vy_samples: 6
     vth_samples: 10
 
     use_dwa: true
 
     # Switching behavior
-    switch_goal_distance: 0.3
+    switch_goal_distance: 0.4
     switch_plan_distance: 0.5
     switch_yaw_error: 0.8
 
     # Cost functions    
-    align_align_scale: 1.0
-    align_plan_scale: 1.0
+    align_align_scale: 3.0
+    align_plan_scale: 0.1
     align_goal_scale: 0.0
     align_obstacle_scale: 0.1
 
     default_align_scale: 1.0
     default_plan_scale: 0.0
     default_goal_scale: 1.0
-    default_obstacle_scale: 0.01
+    default_obstacle_scale: 0.03
 
-    arrive_align_scale: 1.0
+    arrive_align_scale: 2.0
     arrive_plan_scale: 0.0
     arrive_goal_scale: 1.0
     arrive_obstacle_scale: 0.01
