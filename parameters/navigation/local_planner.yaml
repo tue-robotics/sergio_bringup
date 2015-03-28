@@ -65,17 +65,17 @@ DWAPlannerROS:
     align_align_scale: 1.0
     align_plan_scale: 1.0
     align_goal_scale: 0.0
-    align_obstacle_scale: 0.0
+    align_obstacle_scale: 0.1
 
     default_align_scale: 1.0
     default_plan_scale: 0.0
     default_goal_scale: 1.0
-    default_obstacle_scale: 0.00
+    default_obstacle_scale: 0.01
 
     arrive_align_scale: 1.0
     arrive_plan_scale: 0.0
     arrive_goal_scale: 1.0
-    arrive_obstacle_scale: 0.00
+    arrive_obstacle_scale: 0.01
 
     align_cmd_px:  0.0
     align_cmd_nx:  0.0
