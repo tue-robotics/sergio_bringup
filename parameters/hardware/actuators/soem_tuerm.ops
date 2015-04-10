@@ -9,18 +9,18 @@ import("rtt_ros")
 ros.import("sergio_hardware")
 
 #### DECLARATION OF PARAMETERS ####
-var double 	Ts = 0.001
+var double TS = 0.001
 var string LEFT_ARM_SHOULDER 	= "Soem.Slave_1002"
 var string LEFT_ARM_UPPERARM 	= "Soem.Slave_1003"
 var string LEFT_ARM_LOWERARM 	= "Soem.Slave_1004"
-var string  ROBOT 				= "/sergio";
+var string ROBOT 				= "/sergio";
 
 #### MAKING PARAMETERS GLOBAL ####
 loadService("HARDWARE","os")
 os.setenv("LEFT_ARM_SHOULDER",	LEFT_ARM_SHOULDER)
 os.setenv("LEFT_ARM_UPPERARM",	LEFT_ARM_UPPERARM)
 os.setenv("LEFT_ARM_LOWERARM",	LEFT_ARM_LOWERARM)
-os.setenv("ROBOT",	ROBOT)
+os.setenv("ROBOT",				ROBOT)
 
 #### LOAD SUPERVISOR ###
 # TODO correct ports if dashboard is adjusted
@@ -46,7 +46,7 @@ Supervisor.CreateRobotObject("sergio", DEFAULT_PART_NAMES)
 loadComponent("Soem","soem_master::SoemMasterComponent")
 addPeer("Supervisor","Soem")
 Soem.configure
-setActivity("Soem",Ts,HighestPriority,ORO_SCHED_RT)
+setActivity("Soem",TS,HighestPriority,ORO_SCHED_RT)
 connect ("Soem.Slave_1002.encoder1", "Supervisor.serialRunning", ConnPolicy() ) ;
 
 #### LOAD COMPONENT TO ENABLE ANALOG OUTS PERA ###

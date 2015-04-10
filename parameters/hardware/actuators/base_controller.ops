@@ -11,14 +11,15 @@
 
 ##### DECLARATION OF PARAMETERS ####
 	# Part settings
-var double 	Ts = 0.001
+var double 	TS = 0.001
 var string 	BASE_SLAVE_1 		= os.getenv("BASE_SLAVE_1");
 var string 	BASE_SLAVE_2 		= os.getenv("BASE_SLAVE_2");
-var int BODYNUMBER 			= 1
-var string BODYPARTNAME 	= "base"
-var bool HOMEABLE 			= false
-var bool HOMINGMANDATORY	= false
-var bool RESETTABLE			= true
+var string	ROBOT 				= os.getenv("ROBOT")
+var int BODYNUMBER 				= 1
+var string BODYPARTNAME 		= "base"
+var bool HOMEABLE 				= false
+var bool HOMINGMANDATORY		= false
+var bool RESETTABLE				= true
 
 	# System properties
 var double 	WHEELRAD 			= 0.075*1.0147; 	# Corrected for effective wheel radius
@@ -103,7 +104,7 @@ loadComponent("BASE_Controller","FILTERS::Controller")
 addPeer("Supervisor","BASE_Controller")
 setActivity("BASE_Controller",0.0,HighestPriority,ORO_SCHED_RT)
 BASE_Controller.vector_size 				= 3;
-BASE_Controller.sampling_time 				= Ts;
+BASE_Controller.sampling_time 				= TS;
 BASE_Controller.number_of_refports         	= 1
 BASE_Controller.refinport_sizes             = ints (3)
 BASE_Controller.number_of_ffwports          = 0
@@ -125,7 +126,7 @@ BASE_Controller.configure
 #addPeer("Supervisor","BASE_Notch")
 #setActivity("BASE_Notch",0.0,HighestPriority,ORO_SCHED_RT)
 #BASE_Notch.vector_size = 3;
-#BASE_Notch.sampling_time = Ts;
+#BASE_Notch.sampling_time = TS;
 #BASE_Notch.zero_frequency = NOTCH_ZERO_FREQ2;
 #BASE_Notch.zero_damping = NOTCH_ZERO_DAMP2;
 #BASE_Notch.pole_frequency = NOTCH_POLE_FREQ2;
@@ -168,7 +169,7 @@ loadComponent("BASE_ErrorFilter","FILTERS::SecondOrderLowPasses")
 addPeer("Supervisor","BASE_ErrorFilter")
 setActivity("BASE_ErrorFilter",0.0,HighestPriority,ORO_SCHED_RT)
 BASE_ErrorFilter.vector_size	= 4
-BASE_ErrorFilter.sampling_time	= Ts
+BASE_ErrorFilter.sampling_time	= TS
 BASE_ErrorFilter.pole_frequency	= array(100.0, 	100.0, 	100.0, 	100.0);
 BASE_ErrorFilter.pole_damping	= array(0.7, 	0.7, 	0.7, 	0.7);
 BASE_ErrorFilter.configure
@@ -188,7 +189,7 @@ BASE_Safety.configure
 ### READ REFERENCE VELOCITIES ###
 loadComponent("BASE_ReadReferences","ROS::ReadTwistMsg")
 addPeer("Supervisor","BASE_ReadReferences")
-setActivity("BASE_ReadReferences",Ts,LowestPriority,ORO_SCHED_OTHER)
+setActivity("BASE_ReadReferences",TS,LowestPriority,ORO_SCHED_OTHER)
 BASE_ReadReferences.max_start_vel = MAX_START_VEL
 BASE_ReadReferences.max_acc = MAX_ACC
 BASE_ReadReferences.max_vel = MAX_VELOCITIES
@@ -206,8 +207,8 @@ BASE_DigitalOuts.configure
 loadComponent("BASE_OdometryPublisher","ROS::PublishOdometry")
 addPeer("Supervisor","BASE_OdometryPublisher")
 setActivity("BASE_OdometryPublisher",0.05,LowestPriority,ORO_SCHED_OTHER)
-BASE_OdometryPublisher.base_link_frame = "/sergio/base_link"
-BASE_OdometryPublisher.odom_frame = "/sergio/odom"
+BASE_OdometryPublisher.base_link_frame = ROBOT+"/base_link"
+BASE_OdometryPublisher.odom_frame = ROBOT+"/odom"
 BASE_OdometryPublisher.configure
 
 #### LOAD COMPONENT TO PUBLISH DIAGNOSTICS ###
@@ -226,7 +227,7 @@ BASE_Diagnostics.boolname1 = "Amplifiers"
 ### OFFSET OF THE ANALOG OUTPUTS ###
 loadComponent("BASE_AnalogOffset","SOURCES::ConstantSignal")
 addPeer("Supervisor","BASE_AnalogOffset")
-setActivity("BASE_AnalogOffset",Ts,HighestPriority,ORO_SCHED_RT)
+setActivity("BASE_AnalogOffset",TS,HighestPriority,ORO_SCHED_RT)
 BASE_AnalogOffset.vector_size 	= 4;
 BASE_AnalogOffset.value 		= array (-18.0, -14.0, -8.0, -8.0); 
 BASE_AnalogOffset.configure
@@ -300,23 +301,23 @@ connect ("BASE_DigitalOuts.digital_out", BASE_SLAVE_1+".digitalOuts", ConnPolicy
 connect ("BASE_DigitalOuts.digital_out", BASE_SLAVE_2+".digitalOuts", ConnPolicy() ); 
 
 # Reference signal
-stream ("BASE_ReadReferences.cmd_vel", 	ros.topic("/sergio/base/references"));
+stream ("BASE_ReadReferences.cmd_vel", 	ros.topic(ROBOT+"/base/references"));
 connect ("BASE_ReadReferences.out",		"BASE_Controller.ref_in1", ConnPolicy() );
 
 # Diagnostics
 connect ("BASE_ReadEncoders.out",		"BASE_MotorToJointSpacePos.in", ConnPolicy() )
 connect ("BASE_MotorToJointSpacePos.out", 	"BASE_OdometryPublisher.pos", ConnPolicy() );
-stream ("BASE_OdometryPublisher.odom", 	ros.topic("/sergio/base/measurements"));
-stream ("BASE_OdometryPublisher.reset", ros.topic("/sergio/base/reset_odometry"));
+stream ("BASE_OdometryPublisher.odom", 	ros.topic(ROBOT+"/base/measurements"));
+stream ("BASE_OdometryPublisher.reset", ros.topic(ROBOT+"/base/reset_odometry"));
 connect ("BASE_ReadReferences.out", 	"BASE_Diagnostics.vec1", ConnPolicy() )
 connect ("BASE_Controller.jointErrors", "BASE_Diagnostics.vec2", ConnPolicy() )
 connect ("BASE_SI2Bits.out", 			"BASE_Diagnostics.vec3", ConnPolicy() )
-stream ("BASE_Diagnostics.diagnostics", ros.topic("/sergio/base_diagnostics"));
+stream ("BASE_Diagnostics.diagnostics", ros.topic(ROBOT+"/base_diagnostics"));
 
 # Thermal sensor
 connect ("AnalogIns.stdvect_out_2", "BASE_ThermalSensor.in", ConnPolicy() )
 connect ("BASE_ThermalSensor.out", "BASE_ThermalToROS.in", ConnPolicy() )
-stream("BASE_ThermalToROS.out1", ros.topic("/sergio/base/temperature"))
+stream("BASE_ThermalToROS.out1", ros.topic(ROBOT+"/base/temperature"))
 
 #### START COMPONENTS ####
 # Control loop

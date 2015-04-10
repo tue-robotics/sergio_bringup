@@ -13,7 +13,7 @@
 
 #### DECLARATION OF PARAMETERS ####
 # Global parameters
-var double Ts 			= 0.001
+var double TS 			= 0.001
 var int BODYNUMBER 			= 2
 var string BODYPARTNAME 	= "spindle"
 var bool HOMEABLE 			= false
@@ -23,7 +23,7 @@ var bool RESETTABLE			= true
 var string 	TORSO_SLAVE_1 	= os.getenv("TORSO_SLAVE_1"); # torso motors
 var string 	TORSO_SLAVE_2 	= os.getenv("TORSO_SLAVE_2"); # torso beckhoff digital outs
 var string 	TORSO_SLAVE_3 	= os.getenv("TORSO_SLAVE_3"); # torso beckhoff dynamixel
-var string  ROBOT 			= "/sergio";
+var string	ROBOT 			= os.getenv("ROBOT")
 
 # Motor, gearbox and encoder specs
 var double 	TWOPI 			= 2.0*3.141592
@@ -98,7 +98,7 @@ TORSO_ENCToRos.configure
 # Digital outs false
 loadComponent("TORSO_False", "SOURCES::ConstantBool")
 addPeer("Supervisor", "TORSO_False")
-setActivity("TORSO_False", Ts, HighestPriority, ORO_SCHED_RT)
+setActivity("TORSO_False", TS, HighestPriority, ORO_SCHED_RT)
 TORSO_False.value = false;
 TORSO_False.configure
 
@@ -130,8 +130,8 @@ stream ("TORSO_ENCSpindleToAngle.out_joints",		ros.topic(ROBOT+"/joint_states"))
 ############  Start Used for testing #################  
 # data to ros
 connect ("TORSO_ReadEncoders.out","TORSO_ENCToRos.in", ConnPolicy() )
-stream ("TORSO_ENCToRos.out1", ros.topic("/sergio/torso/enc_1"));
-stream ("TORSO_ENCToRos.out2", ros.topic("/sergio/torso/enc_2"));
+stream ("TORSO_ENCToRos.out1", ros.topic(ROBOT+"/torso/enc_1"));
+stream ("TORSO_ENCToRos.out2", ros.topic(ROBOT+"/torso/enc_2"));
 ############  End Used for testing #################  
 ####################################################
 

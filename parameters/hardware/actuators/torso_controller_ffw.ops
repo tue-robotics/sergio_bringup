@@ -11,7 +11,7 @@
 
 #### DECLARATION OF PARAMETERS ####
 # Global parameters
-var double Ts 			= 0.001
+var double TS 				= 0.001
 var int BODYNUMBER 			= 2
 var string BODYPARTNAME 	= "spindle"
 var bool HOMEABLE 			= false
@@ -21,7 +21,7 @@ var bool RESETTABLE			= true
 var string 	TORSO_SLAVE_1 	= os.getenv("TORSO_SLAVE_1"); # torso motors
 var string 	TORSO_SLAVE_2 	= os.getenv("TORSO_SLAVE_2"); # torso beckhoff digital outs
 var string 	TORSO_SLAVE_3 	= os.getenv("TORSO_SLAVE_3"); # torso beckhoff dynamixel
-var string  ROBOT 			= "/sergio";
+var string	ROBOT 			= os.getenv("ROBOT")
 
 # Motor, gearbox and encoder specs
 var double 	TWOPI 			= 2.0*3.141592
@@ -80,14 +80,14 @@ Supervisor.AddBodyPart( BODYNUMBER, BODYPARTNAME, HOMEABLE, HOMINGMANDATORY, RES
 ### FeedForward ###
 loadComponent("TORSO_FeedForwardModel","SERGIOCUSTOM::TorsoFeedForward")
 addPeer("Supervisor","TORSO_FeedForwardModel")
-setActivity("TORSO_FeedForwardModel",Ts,HighestPriority,ORO_SCHED_RT)
+setActivity("TORSO_FeedForwardModel",TS,HighestPriority,ORO_SCHED_RT)
 TORSO_FeedForwardModel.mass_arms = 0.0;
 TORSO_FeedForwardModel.configure
 
 ### FeedForward ###
 loadComponent("TORSO_FeedForwardAcc","FILTERS::FeedForward")
 addPeer("Supervisor","TORSO_FeedForwardAcc")
-setActivity("TORSO_FeedForwardAcc",Ts,HighestPriority,ORO_SCHED_RT)
+setActivity("TORSO_FeedForwardAcc",TS,HighestPriority,ORO_SCHED_RT)
 TORSO_FeedForwardAcc.vector_size = 2;
 TORSO_FeedForwardAcc.coulomb_gain 		= array(0.0, 0.0);
 TORSO_FeedForwardAcc.viscous_gain 		= array(0.0, 0.0);
@@ -112,11 +112,11 @@ TORSO_RefAngleToSpindle.configure
 #Loading Reference Generator
 loadComponent("TORSO_ReferenceGenerator","SOURCES::ReferenceGenerator")
 addPeer("Supervisor","TORSO_ReferenceGenerator")
-setActivity("TORSO_ReferenceGenerator",Ts,HighestPriority,ORO_SCHED_RT)
+setActivity("TORSO_ReferenceGenerator",TS,HighestPriority,ORO_SCHED_RT)
 TORSO_ReferenceGenerator.vector_size      = N_JOINTS
 TORSO_ReferenceGenerator.number_of_inports= 1
 TORSO_ReferenceGenerator.inport_sizes     = ints (2)
-TORSO_ReferenceGenerator.InterpolatorDt   = Ts
+TORSO_ReferenceGenerator.InterpolatorDt   = TS
 TORSO_ReferenceGenerator.InterpolatorEps  = 1.0
 TORSO_ReferenceGenerator.minPosition      = array(MINPOS)
 TORSO_ReferenceGenerator.maxPosition      = array(MAXPOS)
@@ -129,7 +129,7 @@ loadComponent("TORSO_Controller","FILTERS::Controller")
 addPeer("Supervisor","TORSO_Controller")
 setActivity("TORSO_Controller",0.0,HighestPriority,ORO_SCHED_RT)
 TORSO_Controller.vector_size = 2;
-TORSO_Controller.sampling_time = Ts;
+TORSO_Controller.sampling_time = TS;
 TORSO_Controller.controllers = CONTROLLERS;
 TORSO_Controller.number_of_ffwports = 2;
 TORSO_Controller.number_of_refports = 1;
@@ -233,7 +233,7 @@ TORSO_Endstop.direct_to_ROS = true;
 TORSO_Endstop.configure;
 
 ######################################################
-############  Start Used for testing #################  
+############  Start Used for testing #################
 # Reference to ros
 loadComponent("TORSO_RefToRos","ROS::DoublesToROS")
 addPeer("Supervisor","TORSO_RefToRos")
@@ -258,7 +258,7 @@ TORSO_ENCToRos.configure
 # Digital outs false
 loadComponent("TORSO_False", "SOURCES::ConstantBool")
 addPeer("Supervisor", "TORSO_False")
-setActivity("TORSO_False", Ts, HighestPriority, ORO_SCHED_RT)
+setActivity("TORSO_False", TS, HighestPriority, ORO_SCHED_RT)
 TORSO_False.value = false;
 TORSO_False.configure
 
@@ -271,7 +271,7 @@ TORSO_False.configure
 ### SINE REFERENCE GENERATOR (START MANUALLY!!)###
 #loadComponent("IDENTIFICATION_Equilibrium","SOURCES::ConstantSignal")
 #addPeer("Supervisor","IDENTIFICATION_Equilibrium")
-#setActivity("IDENTIFICATION_Equilibrium",Ts,HighestPriority,ORO_SCHED_RT)
+#setActivity("IDENTIFICATION_Equilibrium",TS,HighestPriority,ORO_SCHED_RT)
 #IDENTIFICATION_Equilibrium.value    	= array(0.25, 0.0);
 #IDENTIFICATION_Equilibrium.vector_size 	= 2
 #IDENTIFICATION_Equilibrium.configure
@@ -299,60 +299,60 @@ connect ("TORSO_ReferenceGenerator.velout",	    "TORSO_FeedForwardAcc.vel_in", C
 connect ("TORSO_FeedForwardAcc.out",	    	"TORSO_Controller.ffw_in2", ConnPolicy() );
 
 # Initialize encoders
-connect ("TORSO_InitEncoder.out_safe",    	"TORSO_Safety.calibration", ConnPolicy() )
-connect (TORSO_SLAVE_1+".caliphers",    	"TORSO_InitEncoder.in_calipher", ConnPolicy() )
-connect ("TORSO_InitEncoder.out_reset",    	"TORSO_ReadEncoders.in_init", ConnPolicy() )
+connect ("TORSO_InitEncoder.out_safe",    		"TORSO_Safety.calibration", ConnPolicy() )
+connect (TORSO_SLAVE_1+".caliphers",    		"TORSO_InitEncoder.in_calipher", ConnPolicy() )
+connect ("TORSO_InitEncoder.out_reset",			"TORSO_ReadEncoders.in_init", ConnPolicy() )
 
 # Safety
-connect ("TORSO_Controller.jointErrors",    "TORSO_Safety.jointErrors", ConnPolicy() )
-connect ("TORSO_SI2Bits.out",               "TORSO_Safety.controlEffort", ConnPolicy() )
-connect ("TORSO_Safety.error",              "Supervisor.spindle_error",    ConnPolicy() ); # error
-connect ("TORSO_Safety.enable",             "TORSO_Controller.enable",   ConnPolicy() ); # error
-connect ("TORSO_Safety.enable",             TORSO_SLAVE_1+".enablePort", ConnPolicy() )
-connect ("TORSO_Safety.enable",             "TORSO_EnableDO.in1", ConnPolicy() )
-connect ("TORSO_Safety.enable",             "TORSO_BrakeDO.in1", ConnPolicy() )
-connect ("TORSO_Safety.enable",             "TORSO_EnableDO.in2", ConnPolicy() )
-connect ("TORSO_Safety.enable",             "TORSO_BrakeDO.in2", ConnPolicy() )
-connect ("TORSO_EnableDO.digital_out",      TORSO_SLAVE_1+".digitalOuts", ConnPolicy() )
-connect ("TORSO_BrakeDO.digital_out",       TORSO_SLAVE_2+".bits", ConnPolicy() )
+connect ("TORSO_Controller.jointErrors",    	"TORSO_Safety.jointErrors", ConnPolicy() )
+connect ("TORSO_SI2Bits.out",               	"TORSO_Safety.controlEffort", ConnPolicy() )
+connect ("TORSO_Safety.error",              	"Supervisor.spindle_error",    ConnPolicy() ); # error
+connect ("TORSO_Safety.enable",             	"TORSO_Controller.enable",   ConnPolicy() ); # error
+connect ("TORSO_Safety.enable",             	TORSO_SLAVE_1+".enablePort", ConnPolicy() )
+connect ("TORSO_Safety.enable",             	"TORSO_EnableDO.in1", ConnPolicy() )
+connect ("TORSO_Safety.enable",             	"TORSO_BrakeDO.in1", ConnPolicy() )
+connect ("TORSO_Safety.enable",             	"TORSO_EnableDO.in2", ConnPolicy() )
+connect ("TORSO_Safety.enable",             	"TORSO_BrakeDO.in2", ConnPolicy() )
+connect ("TORSO_EnableDO.digital_out",      	TORSO_SLAVE_1+".digitalOuts", ConnPolicy() )
+connect ("TORSO_BrakeDO.digital_out",       	TORSO_SLAVE_2+".bits", ConnPolicy() )
 connect ("TORSO_ReadEncoders.out", 				"TORSO_Endstop.in1", ConnPolicy() )
 connect ("TORSO_ReadEncoders.out", 				"TORSO_Endstop.in2", ConnPolicy() )
-connect ("TORSO_Endstop.outmsg1",			"TORSO_Safety.endstopLegDown", ConnPolicy() )
-connect ("TORSO_Endstop.outmsg2",			"TORSO_Safety.endstopTrunkDown", ConnPolicy() )
-connect ("TORSO_Endstop.outmsg3",			"TORSO_Safety.endstopLegUp", ConnPolicy() )
-connect ("TORSO_Endstop.outmsg4",			"TORSO_Safety.endstopTrunkUp", ConnPolicy() )
+connect ("TORSO_Endstop.outmsg1",				"TORSO_Safety.endstopLegDown", ConnPolicy() )
+connect ("TORSO_Endstop.outmsg2",				"TORSO_Safety.endstopTrunkDown", ConnPolicy() )
+connect ("TORSO_Endstop.outmsg3",				"TORSO_Safety.endstopLegUp", ConnPolicy() )
+connect ("TORSO_Endstop.outmsg4",				"TORSO_Safety.endstopTrunkUp", ConnPolicy() )
 
 # References 
-stream  ("TORSO_ReadReferences.in",             ros.topic("/sergio/torso/references"))
+stream  ("TORSO_ReadReferences.in",             ros.topic(ROBOT+"/torso/references"))
 connect ("TORSO_ReadReferences.pos_out",        "TORSO_RefAngleToSpindle.in",        ConnPolicy() ); # RefGoal
 connect ("TORSO_RefAngleToSpindle.out",        	"TORSO_ReferenceGenerator.posin1",        ConnPolicy() ); # RefGoal
 connect ("TORSO_ReadEncoders.out",              "TORSO_ReferenceGenerator.initial_pos",   ConnPolicy() ); # Position
 connect ("TORSO_ReferenceGenerator.posout",     "TORSO_Controller.ref_in1",                ConnPolicy() ); # Reference
 
 # Ros communication 
-connect( "TORSO_ReadEncoders.out", 					"TORSO_ENCSpindleToAngle.in", 			ConnPolicy() ); # Position
-stream ("TORSO_ENCSpindleToAngle.out_joints",		ros.topic(ROBOT+"/torso/measurements"));
-stream ("TORSO_ENCSpindleToAngle.out_joints",		ros.topic(ROBOT+"/joint_states"));
+connect( "TORSO_ReadEncoders.out", 				"TORSO_ENCSpindleToAngle.in", 			ConnPolicy() ); # Position
+stream ("TORSO_ENCSpindleToAngle.out_joints",	ros.topic(ROBOT+"/torso/measurements"));
+stream ("TORSO_ENCSpindleToAngle.out_joints",	ros.topic(ROBOT+"/joint_states"));
 
 # diagnostics
-connect ("TORSO_ReferenceGenerator.posout", 		"TORSO_Diagnostics.vec1", 				ConnPolicy() ); # Reference
-connect ("TORSO_Controller.jointErrors", 			"TORSO_Diagnostics.vec2", 				ConnPolicy() ); # JointErrors
-connect ("TORSO_Controller.out", 					"TORSO_Diagnostics.vec3", 				ConnPolicy() ); # ControlEffort
-connect ("TORSO_Safety.enable",						"TORSO_Diagnostics.bool1", 				ConnPolicy() ); # Enable
-stream ("TORSO_Diagnostics.diagnostics",			ros.topic(ROBOT+"/diagnostics"));
+connect ("TORSO_ReferenceGenerator.posout", 	"TORSO_Diagnostics.vec1", 				ConnPolicy() ); # Reference
+connect ("TORSO_Controller.jointErrors", 		"TORSO_Diagnostics.vec2", 				ConnPolicy() ); # JointErrors
+connect ("TORSO_Controller.out", 				"TORSO_Diagnostics.vec3", 				ConnPolicy() ); # ControlEffort
+connect ("TORSO_Safety.enable",					"TORSO_Diagnostics.bool1", 				ConnPolicy() ); # Enable
+stream ("TORSO_Diagnostics.diagnostics",		ros.topic(ROBOT+"/diagnostics"));
 
 ######################################################
 ############  Start Used for testing #################  
 # data to ros
 connect ("TORSO_Controller.jointErrors","TORSO_RefToRos.in", ConnPolicy() )
-stream ("TORSO_RefToRos.out1", ros.topic("/sergio/torso/err_1"));
-stream ("TORSO_RefToRos.out2", ros.topic("/sergio/torso/err_2"));
+stream ("TORSO_RefToRos.out1", ros.topic(ROBOT+"/torso/err_1"));
+stream ("TORSO_RefToRos.out2", ros.topic(ROBOT+"/torso/err_2"));
 connect ("TORSO_Controller.out","TORSO_ControlToRos.in", ConnPolicy() )
-stream ("TORSO_ControlToRos.out1", ros.topic("/sergio/torso/control_1"));
-stream ("TORSO_ControlToRos.out2", ros.topic("/sergio/torso/control_2"));
+stream ("TORSO_ControlToRos.out1", ros.topic(ROBOT+"/torso/control_1"));
+stream ("TORSO_ControlToRos.out2", ros.topic(ROBOT+"/torso/control_2"));
 connect ("TORSO_ReadEncoders.out","TORSO_ENCToRos.in", ConnPolicy() )
-stream ("TORSO_ENCToRos.out1", ros.topic("/sergio/torso/enc_1"));
-stream ("TORSO_ENCToRos.out2", ros.topic("/sergio/torso/enc_2"));
+stream ("TORSO_ENCToRos.out1", ros.topic(ROBOT+"/torso/enc_1"));
+stream ("TORSO_ENCToRos.out2", ros.topic(ROBOT+"/torso/enc_2"));
 ############  End Used for testing #################  
 ####################################################
 

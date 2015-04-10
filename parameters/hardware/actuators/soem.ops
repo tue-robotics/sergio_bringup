@@ -10,7 +10,7 @@ ros.import("sergio_hardware")
 ros.import("amigo_hardware")
 
 #### DECLARATION OF PARAMETERS ####
-var double 	Ts = 0.001
+var double 	TS = 0.001
 var string 	BASE_SLAVE_1 	= "Soem.Slave_1001"; # Wheel 1 and 2
 var string 	BASE_SLAVE_2 	= "Soem.Slave_1002"; # Wheel 3 and 4
 var string 	TORSO_SLAVE_1 	= "Soem.Slave_1003"; # torso motors
@@ -22,36 +22,36 @@ var string  ROBOT 			= "/sergio";
 loadService("HARDWARE","os")
 os.setenv("BASE_SLAVE_1",	BASE_SLAVE_1)
 os.setenv("BASE_SLAVE_2",	BASE_SLAVE_2)
-os.setenv( "TORSO_SLAVE_1",	TORSO_SLAVE_1)
+os.setenv("TORSO_SLAVE_1",	TORSO_SLAVE_1)
 os.setenv("TORSO_SLAVE_2",	TORSO_SLAVE_2)
 os.setenv("TORSO_SLAVE_3",	TORSO_SLAVE_3)
+os.setenv("ROBOT",			ROBOT)
 
 #### LOAD SUPERVISOR ###
 # TODO correct ports if dashboard is adjusted
 loadComponent("Supervisor","SUPERVISORY::Supervisor")
 Supervisor.ebuttonorder	= strings("Wireless","Wired","Endswitch","Reset")
 Supervisor.configure
-setActivity("Supervisor",0.04,LowestPriority,ORO_SCHED_OTHER)
+setActivity("Supervisor",0.04,HighestPriority,ORO_SCHED_RT)
 stream("Supervisor.ebuttonWireless", ros.topic(ROBOT+"/ebuttonWireless"));
 stream("Supervisor.ebuttonWired", ros.topic(ROBOT+"/ebuttonWired"));
 stream("Supervisor.ebuttonEndswitch", ros.topic(ROBOT+"/ebuttonEndswitch"));
 stream("Supervisor.ebuttonReset", ros.topic(ROBOT+"/ebuttonReset"));
 stream("Supervisor.rosshutdown", ros.topic(ROBOT+"/etherCAT_shutdown")); 
 stream("Supervisor.rosetherCATenabled", ros.topic(ROBOT+"/etherCAT_enabled")); 
-stream("Supervisor.hardware_status", ros.topic(ROBOT+"/hardware_status")); 
-stream("Supervisor.dashboardCmd", ros.topic(ROBOT+"/dashboard_ctrlcmds")); 
+stream("Supervisor.hardware_status", ros.topic(ROBOT+"/hardware_status"));
+stream("Supervisor.dashboardCmd", ros.topic(ROBOT+"/dashboard_ctrlcmds"));
 stream("Supervisor.ebutton_status", ros.topic(ROBOT+"/ebutton_status"));
 
 #### Create Robot Object ####
-var strings DEFAULT_PART_NAMES = strings("base","head"); #,"torso","left_arm", "right_arm", "head")
+var strings DEFAULT_PART_NAMES = strings("base","torso","left_arm", "right_arm","head");
 Supervisor.CreateRobotObject("sergio", DEFAULT_PART_NAMES)
 
 ### LOAD SOEM COMPONENT FOR ETHERCAT COMMUNICATION ###
 loadComponent("Soem","soem_master::SoemMasterComponent")
 addPeer("Supervisor","Soem")
 Soem.configure
-setActivity("Soem",Ts,HighestPriority,ORO_SCHED_RT)
-
+setActivity("Soem",TS,HighestPriority,ORO_SCHED_RT)
 connect ("Soem.Slave_1001.encoder1", "Supervisor.serialRunning", ConnPolicy() ) ;
 
 #### LOAD COMPONENT TO ENABLE ANALOG INS (only force sensors are used)###
@@ -66,7 +66,7 @@ setActivity("AnalogIns",1.0,HighestPriority,ORO_SCHED_RT)
 
 connect ("AnalogIns.beckhoffmsg_in_1",BASE_SLAVE_1 +".forceSensors", ConnPolicy() );
 connect ("AnalogIns.beckhoffmsg_in_2",BASE_SLAVE_2 +".forceSensors", ConnPolicy() );
-stream("AnalogIns.rosmsg_out_1", ros.topic("/sergio/battery_value"))
+stream("AnalogIns.rosmsg_out_1", ros.topic(ROBOT+"/battery_value"))
 
 
 #### LOAD COMPONENT TO SEND EMERGENCY SWITCH STATUS TO ROS ###
@@ -96,7 +96,7 @@ var double 	ENC2RAD 		= TWOPI*GEARRATIO/ENCODERCOUNTS
 
 loadComponent("BASE_ReadEncoders","SOEM::ReadEncoders")
 addPeer("Supervisor","BASE_ReadEncoders")
-setActivity("BASE_ReadEncoders",Ts,HighestPriority,ORO_SCHED_RT)
+setActivity("BASE_ReadEncoders",TS,HighestPriority,ORO_SCHED_RT)
 BASE_ReadEncoders.encoderbits = ENCODERBITS;
 BASE_ReadEncoders.enc2SI = array (ENC2RAD, ENC2RAD, ENC2RAD, ENC2RAD)
 BASE_ReadEncoders.configure
@@ -118,7 +118,7 @@ var array ENC2METER			= array(TWOPI/ENCODERCOUNTS_T*GEARBOX_LOWER/METER2RAD,
 
 loadComponent("TORSO_ReadEncoders","SOEM::ReadEncoders")
 addPeer("Supervisor","TORSO_ReadEncoders")
-setActivity("TORSO_ReadEncoders",Ts,HighestPriority,ORO_SCHED_RT)
+setActivity("TORSO_ReadEncoders",TS,HighestPriority,ORO_SCHED_RT)
 TORSO_ReadEncoders.encoderbits = ENCODERBITS_T
 TORSO_ReadEncoders.enc2SI = ENC2METER; 
 TORSO_ReadEncoders.configure
