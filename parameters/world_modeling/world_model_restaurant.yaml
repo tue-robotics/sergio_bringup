@@ -31,5 +31,6 @@ plugins:
 - name: laser_integration
   lib: libed_laser_plugin.so
   enabled: 1
+  frequency: 40
   parameters:
       laser_topic: /sergio/torso_laser/scan
