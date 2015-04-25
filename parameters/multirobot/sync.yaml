@@ -1,2 +1,3 @@
-sync_hosts: ['sergio1','athome10']
-sync_services: ['/amigo/get_alive_nodes']
+sync_hosts: ['amigo1']
+sync_topics: ['/sergio/diagnostics']
+sync_nodes: ['/sergio/node_alive_server']
