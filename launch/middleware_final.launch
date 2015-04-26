@@ -3,11 +3,6 @@
 
     <group ns="sergio">
 
-        <!-- MULTIROBOT MULTIMASTER -->
-        <include file="$(find robot_launch_files)/launch/multirobot/multimaster.launch">
-            <arg name="machine" value="sergio1"/>
-        </include>
-
         <!-- MANIPULATION -->        
         <include file="$(find robot_launch_files)/launch/manipulation/torso.launch">
             <arg name="machine" value="sergio2"/>
