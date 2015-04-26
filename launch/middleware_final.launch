@@ -2,6 +2,11 @@
 <launch>
 
     <group ns="sergio">
+
+        <node name="trigger_server" pkg="challenge_final" type="trigger_server.py">
+            <param name="ip" value="192.168.2.71" />
+            <param name="port" value="4001" />
+        </node>
     
         <node name="sync_ed" pkg="challenge_final" type="server.py">
             <param name="ip" value="192.168.2.71" />
