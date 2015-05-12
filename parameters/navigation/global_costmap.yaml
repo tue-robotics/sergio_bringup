@@ -38,4 +38,4 @@ configuration_space:
     target_cell_value: 254
     dilation_cell_value: 253
     dilation_radius: 0.345 # 2cm margin for 0.65 m robot with
-    inflation_radius: 0.59 # Minimum: 0.49 (circumscribed radius of the robot) + some margin
+    inflation_radius: 0.51 # Minimum: 0.49 (circumscribed radius of the robot) + some margin
