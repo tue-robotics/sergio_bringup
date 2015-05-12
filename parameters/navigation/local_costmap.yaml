@@ -13,7 +13,8 @@ publish_frequency: 0.0
 
 #robot radius overrides the footprint
 #robot_radius: 0.35
-footprint: [[-0.3655, -0.3295], [-0.3655, 0.3295], [0.3655, 0.3295], [0.3655, -0.3295]]
+#footprint: [[-0.3655, -0.3295], [-0.3655, 0.3295], [0.3655, 0.3295], [0.3655, -0.3295]]
+footprint: [[-0.3875, -0.3295], [-0.3875, 0.3295], [0.3475, 0.3295], [0.3475, -0.3295]]
 
 
 always_send_full_costmap: true
