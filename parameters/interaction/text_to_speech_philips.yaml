@@ -1,1 +1,9 @@
 tts_module: festival
+
+#tts_module: philips
+#philips_executable: /home/amigo/ros/hydro/system/src/philips_text_to_speech/amigo/ptts_v911.exe
+#key: /home/amigo/ros/hydro/system/src/philips_text_to_speech/key
+
+#<param name="tts_module" value="philips"/>
+#        <param name="philips_executable" value="$(find philips_text_to_speech)/amigo/ptts_v911.exe"/>
+#        <param name="key" textfile="$(find philips_text_to_speech)/key"/>
