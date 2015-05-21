@@ -1,1 +1,7 @@
-tts_module: festival
+# Parameters only required for philips text to speech
+philips_executable: /home/amigo/ros/hydro/system/src/philips_text_to_speech/sergio/ptts_v911.exe
+
+character: man
+language: us
+voice: kyle
+emotion: neutral
