@@ -265,7 +265,7 @@ addPeer("Supervisor", "BASE_ThermalToSafety")
 setActivity("BASE_ThermalToSafety",0.0,LowestPriority,ORO_SCHED_OTHER)
 BASE_ThermalToSafety.numberofinports = 1;
 BASE_ThermalToSafety.input_sizes = array(1.0);
-BASE_ThermalToSafety.bound_values = array(30.0);
+BASE_ThermalToSafety.bound_values = array(40.0);
 BASE_ThermalToSafety.smaller = ints(1);
 BASE_ThermalToSafety.direct_to_ROS = true;
 BASE_ThermalToSafety.configure;
