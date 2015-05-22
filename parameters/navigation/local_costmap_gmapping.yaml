@@ -33,7 +33,7 @@ plugins:
 # LAYER CONFIGURATION
 
 recent_obstacles:
-    occupied_to_default_time: 2.0
+    occupied_to_default_time: 0.5
     observation_sources: base_laser torso_laser top_kinect
     base_laser:  {data_type: LaserScan, sensor_frame: /sergio/base_laser, topic: /sergio/base_laser/scan, observation_persistence: 0.0, inf_is_valid: true, obstacle_range: 20.0, marking: true, clearing: false, ray_trace_range: 20.0}
     torso_laser:  {data_type: LaserScan, sensor_frame: /sergio/torso_laser, topic: /sergio/torso_laser/scan, observation_persistence: 0.0, inf_is_valid: true, obstacle_range: 20.0, marking: true, clearing: false, ray_trace_range: 20.0}
