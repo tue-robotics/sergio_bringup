@@ -25,3 +25,8 @@ plugins:
   frequency: 40
   parameters:
       laser_topic: /sergio/torso_laser/scan
+- name: entity_clearer
+  lib: libed_clearer_plugin.so
+  enabled: 1
+  parameters:
+      entity_timeout: 1.0
