@@ -170,7 +170,10 @@ TORSO_MotorPWM.configure
 ### Safety ###
 loadComponent("TORSO_Safety","SUPERVISORY::Safety")
 addPeer("Supervisor","TORSO_Safety")
+addPeer("SPINDLE_Safety","TrajectoryActionlib")
 setActivity("TORSO_Safety",0.0,HighestPriority,ORO_SCHED_RT)
+TORSO_Safety.prefix				= "TORSO"
+SPINDLE_Safety.partNr 			= BODYNUMBER
 TORSO_Safety.NJ                  = N_JOINTS
 TORSO_Safety.NM                  = N_MOTORS
 TORSO_Safety.maxJointErrors      = MAX_ERRORS
