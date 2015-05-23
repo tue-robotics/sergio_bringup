@@ -13,13 +13,15 @@ publish_frequency: 0.0
 
 #robot radius overrides the footprint
 #robot_radius: 0.35
-footprint: [[-0.3655, -0.3295], [-0.3655, 0.3295], [0.3655, 0.3295], [0.3655, -0.3295]]
+footprint: [[-0.3875, -0.3295], [-0.3875, 0.3295], [0.3475, 0.3295], [0.3475, -0.3295]]
 
 always_send_full_costmap: true
 
 # LAYER SETUP
 
 plugins: 
+    - {name: gmapping_occupancy_grid,                 type: "costmap_2d::StaticLayer"}
+
     # Obstacles
     - {name: recent_obstacles,                  type: "costmap_2d::ObstacleLayer"}
 
@@ -31,6 +33,11 @@ plugins:
 
 
 # LAYER CONFIGURATION
+
+# Gmapping layer
+gmapping_occupancy_grid:
+    map_topic: /sergio/gmapping/map
+    track_unknown_space: false
 
 recent_obstacles:
     occupied_to_default_time: 1.0
