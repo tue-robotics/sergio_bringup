@@ -12,7 +12,7 @@
 #### DECLARATION OF PARAMETERS ####
 # Global parameters
 var double TS 				= 0.001
-var int BODYNUMBER 			= 2
+var int BODYPARTNR 			= 2
 var string BODYPARTNAME 	= "spindle"
 var bool HOMEABLE 			= false
 var bool HOMINGMANDATORY	= false
@@ -73,7 +73,7 @@ var array   LEAD_FREQUENCY              = array (3.33, 3.33)
 var array   LAG_FREQUENCY               = array (30.0, 30.0)
  
 ### NameBodyPart ###
-Supervisor.AddBodyPart( BODYNUMBER, BODYPARTNAME, HOMEABLE, HOMINGMANDATORY, RESETTABLE)
+Supervisor.AddBodyPart( BODYPARTNR, BODYPARTNAME, HOMEABLE, HOMINGMANDATORY, RESETTABLE)
 
 ### Loading Components ###
 
@@ -173,9 +173,9 @@ addPeer("Supervisor","TORSO_Safety")
 addPeer("TORSO_Safety","TrajectoryActionlib")
 setActivity("TORSO_Safety",0.0,HighestPriority,ORO_SCHED_RT)
 TORSO_Safety.prefix				= "TORSO"
-TORSO_Safety.partNr 			= BODYNUMBER
-TORSO_Safety.NJ                  = N_JOINTS
-TORSO_Safety.NM                  = N_MOTORS
+TORSO_Safety.partNr 			= BODYPARTNR
+TORSO_Safety.Nj                  = N_JOINTS
+TORSO_Safety.Nm                  = N_MOTORS
 TORSO_Safety.maxJointErrors      = MAX_ERRORS
 TORSO_Safety.motorSaturations    = MAX_OUTPUT
 TORSO_Safety.maxConSatTime       = MAX_SATURATION_TIME
@@ -280,7 +280,7 @@ TORSO_False.configure
 #IDENTIFICATION_Equilibrium.configure
 
 #connect ("IDENTIFICATION_Equilibrium.out","TORSO_Controller.ffw_in1", ConnPolicy())
-#Supervisor.AddEnabledPeer(	"IDENTIFICATION_Equilibrium", BODYNUMBER)
+#Supervisor.AddEnabledPeer(	"IDENTIFICATION_Equilibrium", BODYPARTNR)
 
 ############  End Used for testing #################  
 ####################################################
@@ -361,27 +361,27 @@ stream ("TORSO_ENCToRos.out2", ros.topic(ROBOT+"/torso/enc_2"));
 
 #### START COMPONENTS ####
 # Control
-Supervisor.AddEnabledPeer(	"TORSO_Controller", BODYNUMBER)
+Supervisor.AddEnabledPeer(	"TORSO_Controller", BODYPARTNR)
 Supervisor.AddAllwaysOnPeer("TORSO_SI2Bits")
 Supervisor.AddAllwaysOnPeer("TORSO_MotorPWM")
 
 # Feed Forward
-Supervisor.AddEnabledPeer(	"TORSO_FeedForwardModel", BODYNUMBER)
-Supervisor.AddEnabledPeer(	"TORSO_FeedForwardAcc", BODYNUMBER)
+Supervisor.AddEnabledPeer(	"TORSO_FeedForwardModel", BODYPARTNR)
+Supervisor.AddEnabledPeer(	"TORSO_FeedForwardAcc", BODYPARTNR)
 
 # safety
 Supervisor.AddAllwaysOnPeer("TORSO_EnableDO")
 Supervisor.AddAllwaysOnPeer("TORSO_BrakeDO")
 Supervisor.AddAllwaysOnPeer("TORSO_Endstop")
-Supervisor.AddEnabledPeer(	"TORSO_Safety", BODYNUMBER)
+Supervisor.AddEnabledPeer(	"TORSO_Safety", BODYPARTNR)
 
 # init encoders
 Supervisor.AddAllwaysOnPeer ("TORSO_InitEncoder")
 
 # reference
-Supervisor.AddEnabledPeer(	"TORSO_ReadReferences", BODYNUMBER)
-Supervisor.AddEnabledPeer(	"TORSO_RefAngleToSpindle", BODYNUMBER)
-Supervisor.AddEnabledPeer(	"TORSO_ReferenceGenerator", BODYNUMBER)
+Supervisor.AddEnabledPeer(	"TORSO_ReadReferences", BODYPARTNR)
+Supervisor.AddEnabledPeer(	"TORSO_RefAngleToSpindle", BODYPARTNR)
+Supervisor.AddEnabledPeer(	"TORSO_ReferenceGenerator", BODYPARTNR)
 
 # diagnostics
 Supervisor.AddAllwaysOnPeer("TORSO_Diagnostics")

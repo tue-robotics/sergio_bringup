@@ -8,7 +8,7 @@
 
 #### DECLARATION OF PARAMETERS ####
 var double TS 				= 0.001
-var int BODYNUMBER 			= 5
+var int BODYPARTNR 			= 5
 var string BODYPARTNAME 	= "head"
 var bool HOMEABLE 			= false
 var bool HOMINGOBLIGATORY	= false
@@ -47,7 +47,7 @@ var int LASER_MAX 		= 62;	 	#  0.324 *RAD_TO_STEP  (62)
 var int LASER_SPEED 	= 25;
 
 ### AddBodyPart ###
-Supervisor.AddBodyPart( BODYNUMBER, BODYPARTNAME, HOMEABLE, HOMINGOBLIGATORY, RESETTABLE)
+Supervisor.AddBodyPart( BODYPARTNR, BODYPARTNAME, HOMEABLE, HOMINGOBLIGATORY, RESETTABLE)
 
 ## Dynamixel controller
 loadComponent("DYNAMIXEL_Controller", "DYNAMIXEL::DynamixelController")
@@ -82,4 +82,4 @@ stream( "DYNAMIXEL_Controller.currentPos", ros.topic(ROBOT+"/joint_states"))
 
 #### START COMPONENTS ####
 Supervisor.AddAllwaysOnPeer ("DYNAMIXEL_Controller")
-Supervisor.AddEnabledPeer ("DYNAMIXEL_Enabler",BODYNUMBER)
+Supervisor.AddEnabledPeer ("DYNAMIXEL_Enabler",BODYPARTNR)

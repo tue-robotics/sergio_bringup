@@ -15,7 +15,7 @@ var double 	TS = 0.001
 var string 	BASE_SLAVE_1 		= os.getenv("BASE_SLAVE_1");
 var string 	BASE_SLAVE_2 		= os.getenv("BASE_SLAVE_2");
 var string	ROBOT 				= os.getenv("ROBOT")
-var int BODYNUMBER 				= 1
+var int BODYPARTNR 				= 1
 var string BODYPARTNAME 		= "base"
 var bool HOMEABLE 				= false
 var bool HOMINGMANDATORY		= false
@@ -75,7 +75,7 @@ var double MAX_INTERVAL 		= 1.0;				# Max interval between reference signals
 #	var array NOTCH_POLE_DAMP			= array (1.0, 1.0, 1.0)
 	
 ### AddBodyPart ###
-Supervisor.AddBodyPart( BODYNUMBER, BODYPARTNAME, HOMEABLE, HOMINGMANDATORY, RESETTABLE)
+Supervisor.AddBodyPart( BODYPARTNR, BODYPARTNAME, HOMEABLE, HOMINGMANDATORY, RESETTABLE)
 
 ### POSITION TO ODOM ###
 loadComponent("BASE_MotorToJointSpacePos","MATH::MatrixTransform")
@@ -179,8 +179,8 @@ loadComponent("BASE_Safety","SUPERVISORY::Safety")
 addPeer("Supervisor","BASE_Safety")
 setActivity("BASE_Safety",0.0,HighestPriority,ORO_SCHED_RT)
 BASE_Safety.prefix				= "BASE"
-BASE_Safety.NJ					= N_JOINTS
-BASE_Safety.NM					= N_MOTORS
+BASE_Safety.Nj					= N_JOINTS
+BASE_Safety.Nm					= N_MOTORS
 BASE_Safety.maxJointErrors		= MAX_ERRORS
 BASE_Safety.motorSaturations	= MAX_OUTPUT
 BASE_Safety.maxConSatTime		= MAX_SATURATION_TIME
@@ -323,20 +323,20 @@ stream("BASE_ThermalToROS.out1", ros.topic(ROBOT+"/base/temperature"))
 #### START COMPONENTS ####
 # Control loop
 Supervisor.AddAllwaysOnPeer ("BASE_MotorToJointSpace")
-Supervisor.AddEnabledPeer   ("BASE_Controller",			BODYNUMBER)
-Supervisor.AddEnabledPeer 	("BASE_JointToMotorSpace", 	BODYNUMBER)
+Supervisor.AddEnabledPeer   ("BASE_Controller",			BODYPARTNR)
+Supervisor.AddEnabledPeer 	("BASE_JointToMotorSpace", 	BODYPARTNR)
 Supervisor.AddAllwaysOnPeer ("BASE_SI2Bits" )
 Supervisor.AddAllwaysOnPeer ("BASE_AnalogOffset")
 Supervisor.AddAllwaysOnPeer ("BASE_AddOffset")
 Supervisor.AddAllwaysOnPeer ("BASE_AnalogOuts")
 # Reference
-Supervisor.AddEnabledPeer   ("BASE_ReadReferences",		BODYNUMBER )
+Supervisor.AddEnabledPeer   ("BASE_ReadReferences",		BODYPARTNR )
 # Safety 
 Supervisor.AddAllwaysOnPeer ("BASE_ThermalSensor")
 Supervisor.AddAllwaysOnPeer ("BASE_ThermalToROS")
 Supervisor.AddAllwaysOnPeer ("BASE_ThermalToSafety")
-Supervisor.AddEnabledPeer  	("BASE_ErrorFilter", 		BODYNUMBER)
-Supervisor.AddEnabledPeer  	("BASE_Safety", 			BODYNUMBER)
+Supervisor.AddEnabledPeer  	("BASE_ErrorFilter", 		BODYPARTNR)
+Supervisor.AddEnabledPeer  	("BASE_Safety", 			BODYPARTNR)
 # Diagnostics
 Supervisor.AddAllwaysOnPeer ("BASE_MotorToJointSpacePos")
 Supervisor.AddAllwaysOnPeer ("BASE_OdometryPublisher")

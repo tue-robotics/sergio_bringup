@@ -42,14 +42,14 @@ var double RA_EM				= 2.32
 var double RA_WM				= 21.5
 var double VOLT2PWM				= 1000.0/24.0
 var int N						= 7
-var int BODYNUMBER 				= 3
+var int BODYPARTNR 				= 3
 var string BODYPARTNAME 		= "left_arm"
 var bool HOMEABLE 				= false
 var bool HOMINGOBLIGATORY		= false
 var bool RESETTABLE				= false
 
 ### AddBodyPart ###
-Supervisor.AddBodyPart( BODYNUMBER, BODYPARTNAME, HOMEABLE, HOMINGOBLIGATORY, RESETTABLE)
+Supervisor.AddBodyPart( BODYPARTNR, BODYPARTNAME, HOMEABLE, HOMINGOBLIGATORY, RESETTABLE)
 
 ########################################################################
 
@@ -140,8 +140,8 @@ LTUERM_CUR2VOLT.configure
 loadComponent("LTUERM_Safety","SUPERVISORY::Safety")
 addPeer("Supervisor","LTUERM_Safety")
 setActivity("LTUERM_Safety",0.0,HighestPriority,ORO_SCHED_RT)
-LTUERM_Safety.NJ								= N
-LTUERM_Safety.NM								= N
+LTUERM_Safety.Nj								= N
+LTUERM_Safety.Nm								= N
 LTUERM_Safety.maxJointErrors					= MAXERRORS
 LTUERM_Safety.motorSaturations				= array (1000.0, 	1000.0,	 	400.0, 	   	500.0,  	500.0, 	   	500.0, 		500.0, 		900.0)
 LTUERM_Safety.maxConSatTime					= 5.0
@@ -197,5 +197,5 @@ Supervisor.AddAllwaysOnPeer(	"LTUERM_JointToMotorSpace")
 Supervisor.AddAllwaysOnPeer(	"LTUERM_Controller")
 Supervisor.AddAllwaysOnPeer(	"LTUERM_CUR2VOLT")
 
-Supervisor.AddEnabledPeer(		"LTUERM_ReferenceGenerator", 	BODYNUMBER)
-Supervisor.AddEnabledPeer(		"LTUERM_Safety", 				BODYNUMBER)
+Supervisor.AddEnabledPeer(		"LTUERM_ReferenceGenerator", 	BODYPARTNR)
+Supervisor.AddEnabledPeer(		"LTUERM_Safety", 				BODYPARTNR)

@@ -14,7 +14,7 @@
 #### DECLARATION OF PARAMETERS ####
 # Global parameters
 var double TS 			= 0.001
-var int BODYNUMBER 			= 2
+var int BODYPARTNR 			= 2
 var string BODYPARTNAME 	= "spindle"
 var bool HOMEABLE 			= false
 var bool HOMINGMANDATORY	= false
