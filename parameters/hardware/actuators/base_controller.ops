@@ -179,6 +179,7 @@ loadComponent("BASE_Safety","SUPERVISORY::Safety")
 addPeer("Supervisor","BASE_Safety")
 setActivity("BASE_Safety",0.0,HighestPriority,ORO_SCHED_RT)
 BASE_Safety.prefix				= "BASE"
+BASE_Safety.partNr				= BODYPARTNR
 BASE_Safety.Nj					= N_JOINTS
 BASE_Safety.Nm					= N_MOTORS
 BASE_Safety.maxJointErrors		= MAX_ERRORS
