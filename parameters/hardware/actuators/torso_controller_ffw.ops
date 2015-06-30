@@ -170,7 +170,7 @@ TORSO_MotorPWM.configure
 ### Safety ###
 loadComponent("TORSO_Safety","SUPERVISORY::Safety")
 addPeer("Supervisor","TORSO_Safety")
-addPeer("TORSO_Safety","TrajectoryActionlib")
+#addPeer("TORSO_Safety","TrajectoryActionlib")
 setActivity("TORSO_Safety",0.0,HighestPriority,ORO_SCHED_RT)
 TORSO_Safety.prefix				= "TORSO"
 TORSO_Safety.partNr 			= BODYPARTNR
