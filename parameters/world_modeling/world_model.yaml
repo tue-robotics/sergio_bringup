@@ -32,7 +32,7 @@ plugins:
   lib: libed_kinect2_plugin.so
   parameters:
       debug: 0
-      continuous: 0
+      continuous: 1
       topic: /sergio/top_kinect/rgbd
       max_correspondence_distance: 0.2
       max_range: 3
@@ -85,7 +85,7 @@ plugins:
   frequency: 5
   enabled: 1
   parameters:
-    continuous: 0
+    continuous: 1
     fit_shapes: 1
     model_list: rgo_2015.yml
     type_persistence: 0.3 # Between 0 and 1, 0 being no persistence, 1 being full persistence
