@@ -32,9 +32,11 @@ plugins:
   lib: libed_kinect2_plugin.so
   parameters:
       debug: 0
+      continuous: 0
       topic: /sergio/top_kinect/rgbd
       max_correspondence_distance: 0.2
       max_range: 3
+      downsample_factor: 2
 - name: laser_integration
   lib: libed_laser_plugin.so
   parameters:
