@@ -89,6 +89,7 @@ plugins:
     fit_shapes: 1
     model_list: rgo_2015.yml
     type_persistence: 0.3 # Between 0 and 1, 0 being no persistence, 1 being full persistence
+    unknown_probability_prior: 0.5
     modules:
       - lib: libsize_matcher.so
         parameters:
