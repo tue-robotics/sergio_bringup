@@ -1,6 +1,7 @@
+# Parameters only required for philips text to speech
 tts_module: philips
+philips_executable: /home/amigo/ros/hydro/system/src/philips_text_to_speech/sergio/ptts_v911.exe
 
-# Parameters below only required for philips text to speech
 character: man
 language: us
 voice: kyle
