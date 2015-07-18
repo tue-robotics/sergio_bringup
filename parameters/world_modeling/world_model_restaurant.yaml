@@ -25,15 +25,6 @@ plugins:
   frequency: 40
   parameters:
       laser_topic: /sergio/torso_laser/scan
-- name: kinect_integration
-  lib: libed_kinect2_plugin.so
-  parameters:
-      debug: 0
-      continuous: 1
-      topic: /sergio/top_kinect/rgbd
-      max_correspondence_distance: 0.2
-      max_range: 3
-      downsample_factor: 2
 - name: entity_clearer
   lib: libed_clearer_plugin.so
   enabled: 1
