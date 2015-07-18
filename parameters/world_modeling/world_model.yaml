@@ -45,7 +45,7 @@ plugins:
    lib: libed_clearer_plugin.so
    enabled: 1
    parameters:
-       entity_timeout: 1.0
+      entity_timeout: 1.0
 - name: localization
   lib: libed_localization_plugin.so
   enabled: 1
