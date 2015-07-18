@@ -41,10 +41,10 @@ plugins:
   lib: libed_laser_plugin.so
   parameters:
       laser_topic: /sergio/torso_laser/scan
-- name: entity_clearer
-  lib: libed_clearer_plugin.so
-  enabled: 1
-  parameters:
+ - name: entity_clearer
+   lib: libed_clearer_plugin.so
+   enabled: 1
+   parameters:
       entity_timeout: 1.0
 - name: localization
   lib: libed_localization_plugin.so
@@ -156,7 +156,7 @@ plugins:
             enable_learning_service: 1        # enable learning service (boolean). Topic '/face_recognition/learn <PERSON_NAME>'
             eigen_treshold: 3000              # Eingen Faces error threshold (less is better)
             fisher_treshold: 800              # Fisher Faces error threshold (less is better)
-            lbph_treshold: 45                 # LBPH Faces error threshold (less is better) 
+            lbph_treshold: 50                 # LBPH Faces error threshold (less is better) 
             recognition_treshold: 0.95        # final recognition threshold (less is better)
             face_target_size: 150             # size of faces used in the recognition process (square, in pixels) 
             left_eye_vert_offset: 0.35        # offset of the left eye from the top of the image
@@ -172,7 +172,3 @@ plugins:
       #     list_size: 500
       #     min_segment_size: 0.2
       #     min_n_points: 5
-
-#      - lib: libtype_aggregator.so
-#        parameters:
-#          classification_threshold: 0.5     # final classification threshold
