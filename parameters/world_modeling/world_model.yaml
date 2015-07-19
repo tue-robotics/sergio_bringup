@@ -41,10 +41,10 @@ plugins:
   lib: libed_laser_plugin.so
   parameters:
       laser_topic: /sergio/torso_laser/scan
- - name: entity_clearer
-   lib: libed_clearer_plugin.so
-   enabled: 1
-   parameters:
+- name: entity_clearer
+  lib: libed_clearer_plugin.so
+  enabled: 1
+  parameters:
       entity_timeout: 1.0
 - name: localization
   lib: libed_localization_plugin.so
@@ -105,7 +105,7 @@ plugins:
             database_path: /rwc2015/database    # location of database (ed_object_models/configs/odu_finder + <this path>)
             debug_folder: /tmp/odu_finder/
             debug_mode: 0               # activate debug mode for extra output
-            type_unknown_score: 0.05    # default score for an unknown entity
+            score_factor: 0.1           # default score for an unknown entity
 
       - lib: libcolor_matcher.so
         parameters:
