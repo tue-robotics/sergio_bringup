@@ -35,6 +35,7 @@ plugins:
   parameters:
       topic: /sergio/top_kinect/rgbd
       min_poi_distance: 1.0
+      nav_goal_topic: /sergio/local_planner/action_server/goal
       map_topic_in: /sergio/gmapping/map
       map_topic_out: /sergio/map
       models:
