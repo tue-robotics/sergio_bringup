@@ -1,17 +1,8 @@
 <?xml version="1.0"?>
+
 <launch>
 
     <group ns="sergio">
-
-        <node name="trigger_server" pkg="challenge_final" type="trigger_server.py">
-            <param name="ip" value="192.168.2.71" />
-            <param name="port" value="4001" />
-        </node>
-    
-        <node name="sync_ed" pkg="challenge_final" type="server.py">
-            <param name="ip" value="192.168.2.71" />
-            <param name="port" value="4000" />
-        </node>
 
         <!-- MANIPULATION -->        
         <include file="$(find robot_launch_files)/launch/manipulation/torso.launch">
@@ -31,22 +22,24 @@
         <include file="$(find robot_launch_files)/launch/manipulation/head.launch">
             <arg name="machine" value="sergio2"/>
         </include>
-        
-        <!-- NAVIGATION -->
-        <include file="$(find robot_launch_files)/launch/navigation/navigation.launch">
+       
+        <!-- LOCALIZATION GMAPPING -->
+        <include file="$(find robot_launch_files)/launch/localization/gmapping.launch">
+            <arg name="machine" value="sergio1"/>
+	    <arg name="sensor" value="base_laser"/>
+        </include> 
+
+        <!-- NAVIGATION GMAPPING -->
+        <include file="$(find robot_launch_files)/launch/navigation/navigation_gmapping.launch">
             <arg name="machine" value="sergio1"/>
         </include>
 
-        <!-- WORLD MODEL -->
-        <include file="$(find robot_launch_files)/launch/world_modeling/world_model.launch">
+        <!-- WORLD MODEL TODO CHECK KINECT INTEGRATION, REQUIRED? also no localization required -->
+		<include file="$(find robot_launch_files)/launch/world_modeling/world_model.launch">
             <arg name="machine" value="sergio3"/>
             <arg name="config" value="world_modeling/world_model_final.yaml"/>
-        </include> 
+		</include> 
         
-        <include file="$(find robot_launch_files)/launch/world_modeling/reasoner.launch">
-            <arg name="machine" value="sergio3"/>
-        </include> 
-
         <!-- SPEECH RECOGNITION -->
         <include file="$(find robot_launch_files)/launch/interaction/speech_recognition.launch">
             <arg name="machine" value="sergio3"/>
