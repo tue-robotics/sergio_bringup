@@ -38,6 +38,7 @@ plugins:
       nav_goal_topic: /sergio/local_planner/action_server/goal
       map_topic_in: /sergio/gmapping/map
       map_topic_out: /sergio/map
+      wall_height: 1.8
       models:
         - name: rwc2015/bar
           image: $(env TUE_ENV_DIR)/system/src/challenge_open/images/bar.jpg  
