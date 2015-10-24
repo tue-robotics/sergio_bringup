@@ -9,8 +9,6 @@
                 HARDWARE
                 -s $(find sergio_bringup)/parameters/hardware/actuators/soem.ops
                 -s $(find sergio_bringup)/parameters/hardware/actuators/base_controller.ops
-                -s $(find sergio_bringup)/parameters/hardware/actuators/all_dynamixel_controllers.ops
-                -s $(find sergio_bringup)/parameters/hardware/actuators/torso_joint_publisher.ops
             "/>
             <arg name="NAME" value ="hardware"/>
             <arg name="LOG_LEVEL" value="Warning"/>
