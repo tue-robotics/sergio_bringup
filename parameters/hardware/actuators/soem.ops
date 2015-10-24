@@ -32,7 +32,7 @@ os.setenv("ROBOT",			ROBOT)
 loadComponent("Supervisor","SUPERVISORY::Supervisor")
 Supervisor.ebuttonorder	= strings("Wireless","Wired","Endswitch","Reset")
 Supervisor.configure
-setActivity("Supervisor",0.04,HighestPriority,ORO_SCHED_RT)
+setActivity("Supervisor",0.1,HighestPriority,ORO_SCHED_RT)
 stream("Supervisor.ebuttonWireless", ros.topic(ROBOT+"/ebuttonWireless"));
 stream("Supervisor.ebuttonWired", ros.topic(ROBOT+"/ebuttonWired"));
 stream("Supervisor.ebuttonEndswitch", ros.topic(ROBOT+"/ebuttonEndswitch"));
@@ -120,11 +120,6 @@ connect (BASE_SLAVE_1+".encoder1","BASE_ReadEncoders.enc1_in", ConnPolicy() ); #
 connect (BASE_SLAVE_1+".encoder2","BASE_ReadEncoders.enc2_in", ConnPolicy() ); #enc2[-]
 connect (BASE_SLAVE_2+".encoder1","BASE_ReadEncoders.enc3_in", ConnPolicy() ); #enc3[-]
 connect (BASE_SLAVE_2+".encoder2","BASE_ReadEncoders.enc4_in", ConnPolicy() ); #enc4[-]
-
-connect (BASE_SLAVE_1+".encoder1","EtherCATread.base_Ein1", ConnPolicy() ); #enc1[-]
-connect (BASE_SLAVE_1+".encoder2","EtherCATread.base_Ein2", ConnPolicy() ); #enc2[-]
-connect (BASE_SLAVE_2+".encoder1","EtherCATread.base_Ein3", ConnPolicy() ); #enc3[-]
-connect (BASE_SLAVE_2+".encoder2","EtherCATread.base_Ein4", ConnPolicy() ); #enc4[-]
 
 ### READ TORSO ENCODERS ###
 var int ENCODERBITS_T 		= 65536;					# Max encoderbits (16 bits)

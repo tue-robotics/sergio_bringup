@@ -76,12 +76,6 @@ var double MAX_INTERVAL 		= 1.0;				# Max interval between reference signals
 	
 ### AddBodyPart ###
 Supervisor.AddBodyPart( BODYPARTNR, BODYPARTNAME, HOMEABLE, HOMINGMANDATORY, RESETTABLE)
-EtherCATread.AddEncoderIns(array(1.0, 1.0, 1.0, 1.0), array(4.0),array(1.0, 2.0, 3.0, 4.0),array(1.0, 1.0, 1.0, 1.0),BODYPARTNAME)
-EtherCATread.AddEnc2Si_E(BODYPARTNR, array(ENCODERBITS, ENCODERBITS, ENCODERBITS, ENCODERBITS), array(ENC2SI, ENC2SI, ENC2SI, ENC2SI))
-EtherCATwrite.AddAnalogOuts(array(5.0), array(5.0),array(1.0, 1.0, 1.0, 1.0, 1.0),array(1.0, 2.0, 3.0, 4.0, 5.0),"basespindle")
-
-
-
 
 ### POSITION TO ODOM ###
 loadComponent("BASE_MotorToJointSpacePos","MATH::MatrixTransform")
