@@ -34,7 +34,7 @@ plugins:
       exclude: sergio
 
 - name: kinect_integration
-  lib: libed_kinect2_plugin.so
+  lib: libed_kinect_plugin.so
   parameters:
       debug: 0
       continuous: 0
