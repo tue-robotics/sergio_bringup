@@ -16,16 +16,6 @@
             <arg name="machine" value="sergio2"/>
         </include>
 
-        <include file="$(find robot_launch_files)/launch/manipulation/arm.launch">
-            <arg name="name" value="left_arm"/>
-            <arg name="machine" value="sergio2"/>
-        </include>
-
-        <include file="$(find robot_launch_files)/launch/manipulation/arm.launch">
-            <arg name="name" value="right_arm"/>
-            <arg name="machine" value="sergio2"/>
-        </include>
-
         <include file="$(find robot_launch_files)/launch/manipulation/head.launch">
             <arg name="machine" value="sergio2"/>
         </include>
@@ -41,10 +31,10 @@
             <arg name="machine" value="sergio1"/>
         </include>
 
-        <!-- WORLD MODEL TODO CHECK KINECT INTEGRATION, REQUIRED? also no localization required -->
+        <!-- WORLD MODEL -->
 		<include file="$(find robot_launch_files)/launch/world_modeling/world_model.launch">
             <arg name="machine" value="sergio3"/>
-            <arg name="config" value="world_modeling/world_model_final.yaml"/>
+            <arg name="config" value="world_modeling/world_model_open.yaml"/>
 		</include>
 
         <!-- SPEECH RECOGNITION -->
@@ -54,7 +44,8 @@
 
         <!-- TEXT TO SPEECH -->
         <include file="$(find robot_launch_files)/launch/interaction/text_to_speech.launch">
-            <arg name="machine" value="sergio3"/>
+            <arg name="machine-tts" value="sergio3"/>
+            <arg name="machine-play" value="sergio3"/>
         </include>
 
     </group>

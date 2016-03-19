@@ -19,53 +19,30 @@ plugins:
   parameters:
       root_frame_id: /map
       exclude: sergio
-- name: kinect_integration
-  lib: libed_kinect2_plugin.so
+- name: laser_integration
+  lib: libed_laser_plugin.so
+  frequency: 40
+  parameters:
+      laser_topic: /sergio/torso_laser/scan
+      min_segment_size_pixels: 10
+      world_association_distance: 0.4
+      segment_depth_threshold: 0.2
+      min_cluster_size: 0.2
+      max_cluster_size: 1.0
+      max_gap_size: 10
+- name: entity_clearer
+  lib: libed_clearer_plugin.so
   enabled: 1
+  parameters:
+      entity_timeout: 1.0
+- name: perception
+  lib: libed_perception_plugin.so
+- name: kinect_integration
+  lib: libed_kinect_plugin.so
   parameters:
       debug: 0
       continuous: 0
       topic: /sergio/top_kinect/rgbd
-      max_correspondence_distance: 0.1
-      max_range: 3.0
+      max_correspondence_distance: 0.2
+      max_range: 3
       downsample_factor: 2
-
-- name: object_fitter
-  lib: libed_fitter_plugin.so
-  parameters:
-      topic: /sergio/top_kinect/rgbd
-      min_poi_distance: 1.0
-      nav_goal_topic: /sergio/local_planner/action_server/goal
-      map_topic_in: /sergio/gmapping/map
-      map_topic_out: /sergio/map
-      wall_height: 1.8
-      models:
-        - name: rwc2015/bar
-          image: $(env TUE_ENV_DIR)/system/src/challenge_open/images/bar.jpg  
-        - name: rwc2015/bed
-          image: $(env TUE_ENV_DIR)/system/src/challenge_open/images/bed.jpg    
-        - name: rwc2015/bedside_table          
-          image: $(env TUE_ENV_DIR)/system/src/challenge_open/images/bedside_table.jpg    
-        - name: rwc2015/bookcase/bookcase_frame
-          image: $(env TUE_ENV_DIR)/system/src/challenge_open/images/bookcase.jpg
-        - name: rwc2015/couchtable
-          image: $(env TUE_ENV_DIR)/system/src/challenge_open/images/couchtable.jpg          
-        - name: rwc2015/cupboard
-          image: $(env TUE_ENV_DIR)/system/src/challenge_open/images/cupboard.jpg         
-        - name: rwc2015/desk
-          image: $(env TUE_ENV_DIR)/system/src/challenge_open/images/desk.jpg
-        - name: rwc2015/dinnertable
-          image: $(env TUE_ENV_DIR)/system/src/challenge_open/images/dinnertable.jpg       
-        - name: rwc2015/fridge
-          image: $(env TUE_ENV_DIR)/system/src/challenge_open/images/fridge.jpg
-        - name: rwc2015/hallwaytable
-          image: $(env TUE_ENV_DIR)/system/src/challenge_open/images/hallwaytable.jpg
-        - name: rwc2015/kitchencounter
-          image: $(env TUE_ENV_DIR)/system/src/challenge_open/images/kitchencounter.jpg  
-        - name: rwc2015/kitchentable
-          image: $(env TUE_ENV_DIR)/system/src/challenge_open/images/kitchentable.jpg           
-        - name: rwc2015/sofa
-          image: $(env TUE_ENV_DIR)/system/src/challenge_open/images/sofa.jpg          
-        - name: rwc2015/trashbin
-          image: $(env TUE_ENV_DIR)/system/src/challenge_open/images/trashbin.jpg
-
