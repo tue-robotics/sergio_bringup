@@ -28,9 +28,11 @@ plugins:
           default_offset: 0.75
           depth_sensor_integration:
               topic: /sergio/top_kinect/rgbd
-              num_samples: 320
+              num_samples: 640
               slope_threshold: 1
               slope_window_size: 30
+              min_distance: 0.45
+              max_distance: 2.0
 
 - name: tf_publisher
   lib: libed_tf_publisher_plugin.so
@@ -77,7 +79,7 @@ plugins:
       initial_pose:
           x: 0.586 #$(env ROBOT_INIT_X)
           y: 4.259 #$(env ROBOT_INIT_Y)
-          rz: 0 #$(env ROBOT_INIT_PHI)  
+          rz: 0 #$(env ROBOT_INIT_PHI)
       laser_model:
           topic: /sergio/base_laser/scan
           num_beams: 100
