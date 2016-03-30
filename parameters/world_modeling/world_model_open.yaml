@@ -31,8 +31,22 @@ plugins:
     wall_height: 0.8
     rgbd_topic: /sergio/top_kinect/rgbd
     models:
-    - name: reo2016/workbench
-      image: $(rospkg challenge_open)/images/workbench.jpg
+    - name: reo2016/bed
+      image: $(rospkg challenge_open)/images/reo2016/bed.jpg
+    - name: reo2016/bedstand
+      image: $(rospkg challenge_open)/images/reo2016/bedstand.jpg
+    - name: reo2016/couch
+      image: $(rospkg challenge_open)/images/reo2016/couch.jpg
+    - name: reo2016/cupboard
+      image: $(rospkg challenge_open)/images/reo2016/cupboard.jpg
+    - name: reo2016/dinnertable
+      image: $(rospkg challenge_open)/images/reo2016/dinnertable.jpg
+    - name: reo2016/fridge
+      image: $(rospkg challenge_open)/images/reo2016/fridge.jpg
+    - name: reo2016/kitchen_counter
+      image: $(rospkg challenge_open)/images/reo2016/kitchen_counter.jpg
+    - name: reo2016/tvstand
+      image: $(rospkg challenge_open)/images/reo2016/tvstand.jpg
 
 - name: laser_integration
   lib: libed_laser_plugin.so
