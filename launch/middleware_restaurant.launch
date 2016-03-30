@@ -25,10 +25,10 @@
         </include>
 
         <!-- WORLD MODEL TODO CHECK KINECT INTEGRATION, REQUIRED? also no localization required -->
-		<include file="$(find robot_launch_files)/launch/world_modeling/world_model.launch">
+        <include file="$(find robot_launch_files)/launch/world_modeling/world_model.launch">
             <arg name="machine" value="sergio3"/>
             <arg name="config" value="world_modeling/world_model_restaurant.yaml"/>
-		</include> 
+        </include> 
         
         <!-- SPEECH RECOGNITION -->
         <include file="$(find robot_launch_files)/launch/interaction/speech_recognition.launch">
