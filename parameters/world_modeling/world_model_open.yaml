@@ -26,7 +26,7 @@ plugins:
 - name: robocup
   lib: libed_robocup_plugin.so
   parameters:
-    map_topic_in: /map
+    map_topic_in: /sergio/gmapping/map
     map_topic_out: /map
     wall_height: 0.8
     rgbd_topic: /sergio/top_kinect/rgbd
