@@ -12,12 +12,12 @@ DWAPlannerROS:
     max_trans_vel: 1.0
     min_trans_vel: 0.0
 
-    max_vel_x: 1.0
+    max_vel_x: 0.8
     min_vel_x: -0.1
-   
+
     max_vel_y: 0.2
     min_vel_y: -0.2
-    
+
     max_rot_vel: 1.0
     min_rot_vel: 0.1
 
@@ -61,7 +61,7 @@ DWAPlannerROS:
     switch_plan_distance: 0.5
     switch_yaw_error: 0.8
 
-    # Cost functions    
+    # Cost functions
     align_align_scale: 3.0
     align_plan_scale: 0.1
     align_goal_scale: 0.0
@@ -83,14 +83,14 @@ DWAPlannerROS:
     align_cmd_ny:  0.0
     align_cmd_pth: 0.0
     align_cmd_nth: 0.0
-    
+
     default_cmd_px:  0.0
     default_cmd_nx:  100.0
     default_cmd_py:  50.0
     default_cmd_ny:  50.0
     default_cmd_pth: 0.0
     default_cmd_nth: 0.0
-    
+
     arrive_cmd_px:  0.0
     arrive_cmd_nx:  0.0
     arrive_cmd_py:  0.0
