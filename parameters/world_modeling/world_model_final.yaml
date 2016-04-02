@@ -43,12 +43,12 @@ plugins:
 - name: robocup
   lib: libed_robocup_plugin.so
   parameters:
-    map_topic_in: /amigo/gmapping/map
+    map_topic_in: /sergio/gmapping/map
     map_topic_out: /map
     wall_height: 1.7
     map_filter_padding: 0.3
-    rgbd_topic: /amigo/top_kinect/rgbd
-    nav_goal_topic: /amigo/local_planner/action_server/goal
+    rgbd_topic: /sergio/top_kinect/rgbd
+    nav_goal_topic: /sergio/local_planner/action_server/goal
     models:
     # - name: reo2016/bed
     #  image: $(rospkg challenge_open)/images/reo2016/bed.jpg
