@@ -23,6 +23,16 @@ plugins:
       root_frame_id: /map
       exclude: sergio
 
+- name: kinect_integration
+  lib: libed_kinect_plugin.so
+  parameters:
+      debug: 0
+      continuous: 0
+      topic: /sergio/top_kinect/rgbd
+      max_correspondence_distance: 0.2
+      max_range: 3
+      downsample_factor: 2
+
 - name: navigation
   lib: libed_navigation_plugin.so
   parameters:
