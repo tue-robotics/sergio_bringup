@@ -1,6 +1,6 @@
 ########################################################################
 #                                                                      #
-# Simple Open EtherCAT Master (SOEM) deployer file 				   	   #
+# Simple Open EtherCAT Master (SOEM) deployer file                     #
 #                                                                      #
 ########################################################################
 
@@ -120,6 +120,11 @@ connect (BASE_SLAVE_1+".encoder1","BASE_ReadEncoders.enc1_in", ConnPolicy() ); #
 connect (BASE_SLAVE_1+".encoder2","BASE_ReadEncoders.enc2_in", ConnPolicy() ); #enc2[-]
 connect (BASE_SLAVE_2+".encoder1","BASE_ReadEncoders.enc3_in", ConnPolicy() ); #enc3[-]
 connect (BASE_SLAVE_2+".encoder2","BASE_ReadEncoders.enc4_in", ConnPolicy() ); #enc4[-]
+
+connect (BASE_SLAVE_1+".encoder1_vel","BASE_ReadEncoders.vel1_in", ConnPolicy() ); #vel1[-]
+connect (BASE_SLAVE_1+".encoder2_vel","BASE_ReadEncoders.vel2_in", ConnPolicy() ); #vel1[-]
+connect (BASE_SLAVE_2+".encoder1_vel","BASE_ReadEncoders.vel3_in", ConnPolicy() ); #vel1[-]
+connect (BASE_SLAVE_2+".encoder1_vel","BASE_ReadEncoders.vel4_in", ConnPolicy() ); #vel1[-]
 
 ### READ TORSO ENCODERS ###
 var int ENCODERBITS_T 		= 65536;					# Max encoderbits (16 bits)
