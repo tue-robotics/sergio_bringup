@@ -48,10 +48,6 @@ plugins:
   lib: libed_laser_plugin.so
   parameters:
       laser_topic: /sergio/torso_laser/scan
-- name: laser_integration_base
-  lib: libed_laser_plugin.so
-  parameters:
-      laser_topic: /sergio/base_laser/scan
 - name: localization
   lib: libed_localization_plugin.so
   enabled: 1
@@ -63,7 +59,7 @@ plugins:
           y: $(env ROBOT_INIT_Y)
           rz: $(env ROBOT_INIT_PHI)    
       laser_model:
-          topic: /sergio/base_laser/scan
+          topic: /sergio/back_laser/scan
           num_beams: 100
           z_hit: 0.95
           sigma_hit: 0.2
