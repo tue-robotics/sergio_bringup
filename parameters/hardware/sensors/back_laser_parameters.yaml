@@ -1,0 +1,4 @@
+port: /dev/ttyACM0
+frame_id: /sergio/back_laser
+min_ang: -2.35619449615
+max_ang: 2.35619449615
