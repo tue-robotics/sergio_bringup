@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+
+	<include file="$(find robot_launch_files)/launch/record/record_robocup.launch">
+		<arg name="machine" value="sergio2" />
+		<arg name="robot_name" value="sergio" />
+	</include>
+
+</launch>
