@@ -114,6 +114,7 @@ addPeer("Supervisor","BASE_ReadEncoders")
 setActivity("BASE_ReadEncoders",TS,HighestPriority,ORO_SCHED_RT)
 BASE_ReadEncoders.encoderbits = ENCODERBITS;
 BASE_ReadEncoders.enc2SI = array (ENC2RAD, ENC2RAD, ENC2RAD, ENC2RAD)
+BASE_ReadEncoders.gearratios = array (GEARRATIO, GEARRATIO, GEARRATIO, GEARRATIO)
 BASE_ReadEncoders.configure
 
 connect (BASE_SLAVE_1+".encoder1","BASE_ReadEncoders.enc1_in", ConnPolicy() ); #enc1[-]
@@ -139,7 +140,8 @@ loadComponent("TORSO_ReadEncoders","SOEM::ReadEncoders")
 addPeer("Supervisor","TORSO_ReadEncoders")
 setActivity("TORSO_ReadEncoders",TS,HighestPriority,ORO_SCHED_RT)
 TORSO_ReadEncoders.encoderbits = ENCODERBITS_T
-TORSO_ReadEncoders.enc2SI = ENC2METER; 
+TORSO_ReadEncoders.enc2SI = ENC2METER;
+TORSO_ReadEncoders.gearratios = array (GEARBOX_LOWER/METER2RAD, GEARBOX_UPPER/METER2RAD)
 TORSO_ReadEncoders.configure
 
 connect (TORSO_SLAVE_1+".encoder1","TORSO_ReadEncoders.enc1_in", ConnPolicy() )
