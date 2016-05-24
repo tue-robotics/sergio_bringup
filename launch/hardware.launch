@@ -48,7 +48,7 @@
         </include>
         <include file="$(find robot_launch_files)/launch/hardware/sensors/laser.launch">
             <arg name="name" value="back_laser"/>
-            <arg name="machine" value="sergio3"/>
+            <arg name="machine" value="sergio2"/>
         </include>
 
     </group>

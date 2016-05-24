@@ -1,2 +1,2 @@
-port: /dev/ttyACM1
+port: /dev/ttyACM0
 frame_id: /sergio/torso_laser
