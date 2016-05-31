@@ -1,4 +1,4 @@
-port: /dev/ttyACM0
+port: /dev/sensors/hokuyo_busid_1-1.3
 frame_id: /sergio/back_laser
 min_ang: -2.35619449615
 max_ang: 2.35619449615
