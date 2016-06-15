@@ -48,25 +48,12 @@ var strings DEFAULT_PART_NAMES = strings("base","torso","left_arm", "right_arm",
 Supervisor.CreateRobotObject("sergio", DEFAULT_PART_NAMES)
 
 
-### LOAD ETHERCAT READ ###
-loadComponent("EtherCATread","ETHERCATREAD::EtherCATread")
-addPeer("Supervisor","EtherCATread")
-EtherCATread.configure
-setActivity("EtherCATread",TS,HighestPriority,ORO_SCHED_RT)
-
 ### LOAD SOEM COMPONENT FOR ETHERCAT COMMUNICATION ###
 loadComponent("Soem","soem_master::SoemMasterComponent")
 addPeer("Supervisor","Soem")
 Soem.configure
 setActivity("Soem",TS,HighestPriority,ORO_SCHED_RT)
 connect ("Soem.Slave_1001.encoder1", "Supervisor.serialRunning", ConnPolicy() ) ;
-
-### LOAD ETHERCAT WRITE ###
-loadComponent("EtherCATwrite","ETHERCATWRITE::EtherCATwrite")
-addPeer("Supervisor","EtherCATwrite")
-EtherCATwrite.configure
-setActivity("EtherCATwrite",TS,HighestPriority,ORO_SCHED_RT)
-
 
 
 #### LOAD COMPONENT TO ENABLE ANALOG INS (only force sensors are used)###
