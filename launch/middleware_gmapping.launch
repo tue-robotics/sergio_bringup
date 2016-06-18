@@ -39,11 +39,6 @@
             <arg name="machine" value="sergio3"/>
 		</include>--> 
         
-        <!-- SPEECH RECOGNITION -->
-        <include file="$(find robot_launch_files)/launch/interaction/speech_recognition.launch">
-            <arg name="machine" value="sergio3"/>
-        </include> 
-
         <!-- TEXT TO SPEECH -->
         <include file="$(find robot_launch_files)/launch/interaction/text_to_speech.launch">
             <arg name="machine-tts" value="sergio3"/>
