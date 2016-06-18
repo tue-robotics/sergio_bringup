@@ -4,20 +4,20 @@
 
     <group ns="sergio">
 
-        <!-- MANIPULATION -->        
+        <!-- MANIPULATION -->
         <include file="$(find robot_launch_files)/launch/manipulation/torso.launch">
             <arg name="machine" value="sergio2"/>
         </include>
-        
+
         <include file="$(find robot_launch_files)/launch/manipulation/head.launch">
             <arg name="machine" value="sergio2"/>
         </include>
-       
+
         <!-- LOCALIZATION GMAPPING -->
         <include file="$(find robot_launch_files)/launch/localization/gmapping.launch">
             <arg name="machine" value="sergio1"/>
-	    <arg name="sensor" value="base_laser"/>
-        </include> 
+	    <arg name="sensor" value="back_laser"/>
+        </include>
 
         <!-- NAVIGATION GMAPPING -->
         <include file="$(find robot_launch_files)/launch/navigation/navigation_gmapping.launch">
@@ -28,19 +28,19 @@
         <include file="$(find robot_launch_files)/launch/world_modeling/world_model.launch">
             <arg name="machine" value="sergio3"/>
             <arg name="config" value="world_modeling/world_model_restaurant.yaml"/>
-        </include> 
-        
+        </include>
+
         <!-- TEXT TO SPEECH -->
         <include file="$(find robot_launch_files)/launch/interaction/text_to_speech.launch">
             <arg name="machine-tts" value="sergio3"/>
             <arg name="machine-play" value="sergio3"/>
-        </include> 
+        </include>
 
         <!-- Action server -->
         <include file="$(find robot_launch_files)/launch/interaction/action_server.launch">
             <arg name="machine" value="sergio1"/>
             <arg name="robot" value="sergio" />
-        </include> 
+        </include>
 
     </group>
 
