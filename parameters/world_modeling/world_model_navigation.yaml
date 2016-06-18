@@ -24,6 +24,14 @@ plugins:
           max_z: 1.8
           default_offset: 0.7
           unknown_obstacle_inflation: 0.05
+      depth_sensor_integration:
+          frame_id: /map
+          topic: /sergio/top_kinect/rgbd
+          num_samples: 640
+          slope_threshold: 1
+          slope_window_size: 30
+          min_distance: 0.45
+          max_distance: 2.0
 - name: tf_publisher
   lib: libed_tf_publisher_plugin.so
   parameters:
