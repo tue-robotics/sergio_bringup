@@ -102,11 +102,24 @@ plugins:
       type: rwc2016/kitchen_counter
     - id: table_black
       type: rwc2016/table_black
+    - id: plant-small-1
+      type: rwc2016/plant
+    - id: plant-small-1
+      type: rwc2016/plant
+    - id: plant-big
+      type: rwc2016/plant
     - id: table_bureau
       type: rwc2016/table_bureau
     - id: table_salon
       type: rwc2016/table_salon
       # image: $(rospkg challenge_open)/images/robotics_testlabs/table_120x80x76.jpg
+    - id: armchair-1
+      type: rwc2016/armchair
+    - id: armchair-2
+      type: rwc2016/armchair
+    - id: armchair-3
+      type: rwc2016/armchair
+
 
 - name: localization
   lib: libed_localization_plugin.so
