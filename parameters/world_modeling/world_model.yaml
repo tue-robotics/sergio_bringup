@@ -102,22 +102,22 @@ plugins:
       type: rwc2016/kitchen_counter
     - id: table_black
       type: rwc2016/table_black
-    - id: plant-small-1
+    - id: plant_small_1
       type: rwc2016/plant
-    - id: plant-small-1
+    - id: plant_small_2
       type: rwc2016/plant
-    - id: plant-big
+    - id: plant_big
       type: rwc2016/plant
     - id: table_bureau
       type: rwc2016/table_bureau
     - id: table_salon
       type: rwc2016/table_salon
       # image: $(rospkg challenge_open)/images/robotics_testlabs/table_120x80x76.jpg
-    - id: armchair-1
+    - id: armchair_1
       type: rwc2016/armchair
-    - id: armchair-2
+    - id: armchair_2
       type: rwc2016/armchair
-    - id: armchair-3
+    - id: armchair_3
       type: rwc2016/armchair
 
 
