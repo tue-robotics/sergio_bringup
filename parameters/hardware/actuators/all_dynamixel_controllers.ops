@@ -52,7 +52,7 @@ Supervisor.AddBodyPart( BODYPARTNR, BODYPARTNAME, HOMEABLE, HOMINGOBLIGATORY, RE
 ## Dynamixel controller
 loadComponent("DYNAMIXEL_Controller", "DYNAMIXEL::DynamixelController")
 addPeer("Supervisor","DYNAMIXEL_Controller")
-setActivity("DYNAMIXEL_Controller",TS,HighestPriority,ORO_SCHED_RT)
+setActivity("DYNAMIXEL_Controller",TS/10,HighestPriority,ORO_SCHED_RT)
 DYNAMIXEL_Controller.joint_names 		= JOINT_NAMES
 DYNAMIXEL_Controller.dynamixel_ids		= ints(PAN_ID,					TILT_ID,				LASER_ID)
 DYNAMIXEL_Controller.dynamixel_offset 	= ints(PAN_OFFSET, 				TILT_OFFSET,			LASER_OFFSET)
