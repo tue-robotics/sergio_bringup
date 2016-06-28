@@ -69,6 +69,45 @@ plugins:
   parameters:
       entity_timeout: 1.0
 
+- name: robocup
+  lib: libed_robocup_plugin.so
+  parameters:
+    map_topic_in: /sergio/gmapping/map
+    map_topic_out: /map
+    wall_height: 1.7
+    map_filter_padding: 0.3
+    rgbd_topic: /sergio/top_kinect/rgbd
+    nav_goal_topic: /sergio/local_planner/action_server/goal
+    head_goal_topic: /sergio/head_ref/action_server/goal
+    models:
+    - id: bed_frame
+      type: rwc2016/bed_frame
+    - id: bookcase1
+      type: rwc2016/bookcase1 
+    - id: bookcase2
+      type: rwc2016/bookcase2
+    - id: bookcase_noback
+      type: rwc2016/bookcase_noback
+    - id: cabinet_2doors
+      type: rwc2016/cabinet_2doors
+    - id: cabinet_2slides
+      type: rwc2016/cabinet_2slides
+    - id: cabinet_open_large
+      type: rwc2016/cabinet_open_large
+    - id: cabinet_open_small
+      type: rwc2016/cabinet_open_small
+    - id: couch
+      type: rwc2016/couch
+    - id: kitchen_counter
+      type: rwc2016/kitchen_counter
+    - id: table_black
+      type: rwc2016/table_black
+    - id: table_bureau
+      type: rwc2016/table_bureau
+    - id: table_salon
+      type: rwc2016/table_salon
+      # image: $(rospkg challenge_open)/images/robotics_testlabs/table_120x80x76.jpg
+
 - name: localization
   lib: libed_localization_plugin.so
   enabled: 1
