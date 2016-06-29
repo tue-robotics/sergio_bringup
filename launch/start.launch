@@ -31,7 +31,14 @@
         <!-- SPEECH RECOGNITION -->
         <include file="$(find robot_launch_files)/launch/interaction/speech_recognition.launch">
             <arg name="machine" value="sergio3"/>
-        </include> 
+        </include>
+        <!-- If we are on the real robot, also launch the mic on sergio4 -->
+        <group if="$(optenv ROBOT_REAL false)">
+			<!-- bridge to windows -->
+			<node name="sergio4_speech_recognition" pkg="dragonfly_speech_recognition" type="ros_speech_bridge_xmlrpc" machine="$(arg machine)" output="log">
+				<rosparam name="ip" value="192.168.2.74" />
+			</node>
+		</group>
 
         <!-- DIAGNOSTICS -->
         <include file="$(find robot_launch_files)/launch/diagnostics/diagnostics.launch" >
@@ -41,7 +48,7 @@
     </group>
 
     <!-- TF Server: advertises services for looking up transformations -->
-    <include file="$(find robot_launch_files)/launch/essentials/tf_server.launch" >  
+    <include file="$(find robot_launch_files)/launch/essentials/tf_server.launch" >
         <arg name="machine" value="sergio1" />
     </include>
 
