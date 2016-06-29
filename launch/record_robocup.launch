@@ -2,7 +2,7 @@
 <launch>
 
     <!-- Get the machine file -->
-    <arg name="machine" default="sergio3"/>
+    <arg name="machine" default="sergio1"/>
 
     <include file="$(find sergio_bringup)/machines/$(arg machine).machine" />
 
