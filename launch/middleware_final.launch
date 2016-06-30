@@ -16,11 +16,11 @@
 
         <!-- MANIPULATION -->
         <include file="$(find robot_launch_files)/launch/manipulation/torso.launch">
-            <arg name="machine" value="sergio2"/>
+            <arg name="machine" value="sergio1"/>
         </include>
 
         <include file="$(find robot_launch_files)/launch/manipulation/head.launch">
-            <arg name="machine" value="sergio2"/>
+            <arg name="machine" value="sergio1"/>
         </include>
 
         <!-- LOCALIZATION GMAPPING -->
