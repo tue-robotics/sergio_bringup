@@ -136,7 +136,7 @@ BASE_Controller.configure
 ### CONTROL ODOM TO WHEEL ###
 loadComponent("BASE_JointToMotorSpace","MATH::MatrixTransform")
 addPeer("Supervisor","BASE_JointToMotorSpace")
-setActivity("BASE_JointToMotorSpace",0.0,LowestPriority,ORO_SCHED_OTHER)
+setActivity("BASE_JointToMotorSpace",0.0,HighestPriority,ORO_SCHED_RT)
 BASE_JointToMotorSpace.Nrows = 4
 BASE_JointToMotorSpace.Ncolumns = 3
 BASE_JointToMotorSpace.configure
