@@ -5,3 +5,15 @@ analyzers:
     timeout: -1
     startswith: node_alive
     remove_prefix: node_alive
+
+  computers:
+    type: diagnostic_aggregator/AnalyzerGroup
+    path: Computers
+    analyzers:
+      cpu:
+        type: diagnostic_aggregator/GenericAnalyzer
+        path: CPU
+        expected: ['sergio1 CPU Temperature',
+                   'sergio1 CPU Usage',
+                   'sergio1 HD Temperature',
+                   'sergio1 HD Usage']

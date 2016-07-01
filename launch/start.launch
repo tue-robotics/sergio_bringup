@@ -43,9 +43,42 @@
 		</group>
 
         <!-- DIAGNOSTICS -->
-        <include file="$(find robot_launch_files)/launch/diagnostics/diagnostics.launch" >
-            <arg name="machine" value="sergio1" />
-        </include>
+		<node pkg="topic_tools" name="diagnostics_relay" type="relay" args="diagnostics /diagnostics" />
+		<node pkg="topic_tools" name="diagnostics_agg_relay" type="relay" args="diagnostics_agg /diagnostics_agg" />
+		<include file="$(find robot_launch_files)/launch/diagnostics/diagnostics.launch">
+			<arg name="machine" value="sergio1" />
+		</include>
+
+		<!-- NTP MONITOR -->
+	    <group if="$(optenv ROBOT_REAL false)">
+			<include file="$(find robot_launch_files)/launch/diagnostics/ntp_monitor.launch">
+				<arg name="machine" value="sergio2" />
+			</include>
+			<include file="$(find robot_launch_files)/launch/diagnostics/ntp_monitor.launch">
+				<arg name="machine" value="sergio3" />
+			</include>
+		</group>
+
+		<!-- CPU MONITOR -->
+	    <group if="$(optenv ROBOT_REAL false)">
+			<include file="$(find robot_launch_files)/launch/diagnostics/cpu_monitor.launch" >
+				<arg name="machine" value="sergio1" />
+			</include>
+			<include file="$(find robot_launch_files)/launch/diagnostics/cpu_monitor.launch" >
+				<arg name="machine" value="sergio2" />
+			</include>
+			<include file="$(find robot_launch_files)/launch/diagnostics/cpu_monitor.launch" >
+				<arg name="machine" value="sergio3" />
+			</include>
+			<include file="$(find robot_launch_files)/launch/diagnostics/cpu_monitor.launch" >
+				<arg name="machine" value="sergio4" />
+			</include>
+		</group>
+	    <group unless="$(optenv ROBOT_REAL false)">
+			<include file="$(find robot_launch_files)/launch/diagnostics/cpu_monitor.launch" >
+				<arg name="machine" value="sergio1" />
+			</include>
+		</group>
 
     </group>
 
