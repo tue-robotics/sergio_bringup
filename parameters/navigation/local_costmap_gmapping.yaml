@@ -41,7 +41,7 @@ gmapping_occupancy_grid:
 
 recent_obstacles:
     occupied_to_default_time: 1.0
-    observation_sources: base_laser back_laser torso_laser top_kinect
+    observation_sources: base_laser back_laser top_kinect #torso_laser
     base_laser:  {data_type: LaserScan, sensor_frame: /sergio/base_laser, topic: /sergio/base_laser/scan, observation_persistence: 0.0, inf_is_valid: true, obstacle_range: 20.0, marking: true, clearing: false, ray_trace_range: 20.0}
     back_laser: {data_type: LaserScan, sensor_frame: /sergio/back_laser, topic: /sergio/back_laser/scan, observation_persistence: 0.0, inf_is_valid: true, obstacle_range: 20.0, marking: true, clearing: false, ray_trace_range: 20.0}
     torso_laser:  {data_type: LaserScan, sensor_frame: /sergio/torso_laser, topic: /sergio/torso_laser/scan, observation_persistence: 0.0, inf_is_valid: true, obstacle_range: 20.0, marking: true, clearing: false, ray_trace_range: 20.0}
