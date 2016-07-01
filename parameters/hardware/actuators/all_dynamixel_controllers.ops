@@ -7,7 +7,7 @@
 ########################################################################
 
 #### DECLARATION OF PARAMETERS ####
-var double TS 				= 0.001
+var double TSdynamixel		= 0.01
 var int BODYPARTNR 			= 5
 var string BODYPARTNAME 	= "head"
 var bool HOMEABLE 			= false
@@ -52,7 +52,7 @@ Supervisor.AddBodyPart( BODYPARTNR, BODYPARTNAME, HOMEABLE, HOMINGOBLIGATORY, RE
 ## Dynamixel controller
 loadComponent("DYNAMIXEL_Controller", "DYNAMIXEL::DynamixelController")
 addPeer("Supervisor","DYNAMIXEL_Controller")
-setActivity("DYNAMIXEL_Controller",TS/10,HighestPriority,ORO_SCHED_RT)
+setActivity("DYNAMIXEL_Controller",TSdynamixel,HighestPriority,ORO_SCHED_RT)
 DYNAMIXEL_Controller.joint_names 		= JOINT_NAMES
 DYNAMIXEL_Controller.dynamixel_ids		= ints(PAN_ID,					TILT_ID,				LASER_ID)
 DYNAMIXEL_Controller.dynamixel_offset 	= ints(PAN_OFFSET, 				TILT_OFFSET,			LASER_OFFSET)
@@ -64,7 +64,7 @@ DYNAMIXEL_Controller.configure
 ## Dynamixel enabler
 loadComponent("DYNAMIXEL_Enabler", "AMIGOHEAD::HeadEnabler")
 addPeer("Supervisor","DYNAMIXEL_Enabler")
-setActivity("DYNAMIXEL_Enabler",TS,HighestPriority,ORO_SCHED_RT)
+setActivity("DYNAMIXEL_Enabler",TSdynamixel,LowestPriority,ORO_SCHED_OTHER)
 DYNAMIXEL_Enabler.configure
 
 #### CONNECT COMPONENTS ####
