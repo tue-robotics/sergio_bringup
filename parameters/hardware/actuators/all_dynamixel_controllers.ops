@@ -7,7 +7,7 @@
 ########################################################################
 
 #### DECLARATION OF PARAMETERS ####
-var double TSdynamixel		= 0.01
+var double TSdynamixel		= 0.02
 var int BODYPARTNR 			= 5
 var string BODYPARTNAME 	= "head"
 var bool HOMEABLE 			= false
