@@ -18,6 +18,12 @@
             <arg name="machine" value="sergio1"/>
         </include>
 
+        <!-- LOCALIZATION GMAPPING -->
+        <include file="$(find robot_launch_files)/launch/localization/gmapping.launch">
+            <arg name="machine" value="sergio1"/>
+	    <arg name="sensor" value="base_laser"/>
+        </include>
+
         <!-- NAVIGATION GMAPPING -->
         <include file="$(find robot_launch_files)/launch/navigation/navigation.launch">
             <arg name="machine" value="sergio1"/>
@@ -26,7 +32,7 @@
         <!-- WORLD MODEL TODO CHECK KINECT INTEGRATION, REQUIRED? also no localization required -->
         <include file="$(find robot_launch_files)/launch/world_modeling/world_model.launch">
             <arg name="machine" value="sergio3"/>
-            <arg name="config" value="world_modeling/world_model_final.yaml"/>
+            <arg name="config" value="world_modeling/world_model_final_gmapping.yaml"/>
         </include>
 
         <!-- TEXT TO SPEECH -->
