@@ -62,60 +62,18 @@ plugins:
     nav_goal_topic: /sergio/local_planner/action_server/goal
     head_goal_topic: /sergio/head_ref/action_server/goal
     models:
-    - id: drawer
-      type: rwc2016/cabinet_2doors
-      image: $(rospkg challenge_open)/images/rwc2016a/cabinet_2doors.jpg
-    - id: desk
+    - id: table1
       type: rwc2016/table_bureau
-      image: $(rospkg challenge_open)/images/rwc2016a/table_bureau.jpg
-    - id: bed
-      type: rwc2016/bed_frame
-      image: $(rospkg challenge_open)/images/rwc2016a/bed_frame.jpg
-    - id: couch
-      type: rwc2016/couch
-      image: $(rospkg challenge_open)/images/rwc2016a/couch.jpg
-    - id: sink
-      type: rwc2016/kitchen_counter
-      image: $(rospkg challenge_open)/images/rwc2016a/kitchen_counter.jpg
-    - id: bedside
-      type: rwc2016/ikea_table_red
-      image: $(rospkg challenge_open)/images/rwc2016a/bedside.jpg
+      image: $(rospkg challenge_final)/images/table1.jpg
+    - id: table2
+      type: rwc2016/table_bureau
+      image: $(rospkg challenge_final)/images/table2.jpg
+    - id: table3
+      type: rwc2016/table_bureau
+      image: $(rospkg challenge_final)/images/table3.jpg
     - id: bar
-      type: rwc2016/bookcase_noback
-      image: $(rospkg challenge_open)/images/rwc2016a/bookcase.jpg
-    - id: cupboard
-      type: rwc2016/cabinet_2doors
-      image: $(rospkg challenge_open)/images/rwc2016a/cabinet_2doors.jpg
-    - id: sideshelf
-      type: rwc2016/cabinet_2slides
-      image: $(rospkg challenge_open)/images/rwc2016a/cabinet_2slides.jpg
-    - id: bookcase
-      type: rwc2016/bookcase_noback
-      image: $(rospkg challenge_open)/images/rwc2016a/bookcase.jpg
-    - id: dining_table
-      type: rwc2016/table_black
-      image: $(rospkg challenge_open)/images/rwc2016a/table_black.jpg
-    - id: table_salon
-      type: rwc2016/table_salon
-      image: $(rospkg challenge_open)/images/rwc2016a/table_salon.jpg
-    - id: tv_stand
       type: rwc2016/cabinet_open_small
-      image: $(rospkg challenge_open)/images/rwc2016a/cabinet_open.jpg
-    - id: living_shelf
-      type: rwc2016/cabinet_open_large
-      image: $(rospkg challenge_open)/images/rwc2016a/cabinet_open.jpg
-    - id: living_table
-      type: rwc2016/table_salon
-      image: $(rospkg challenge_open)/images/rwc2016a/table_salon.jpg
-    - id: cabinet
-      type: rwc2016/cabinet_open_small
-      image: $(rospkg challenge_open)/images/rwc2016a/cabinet_open.jpg
-    - id: door_left
-      type: rwc2016/door_left
-      image: $(rospkg challenge_open)/images/rwc2016a/door.jpg
-    - id: door_right
-      type: rwc2016/door_right
-      image: $(rospkg challenge_open)/images/rwc2016a/door.jpg
+      image: $(rospkg challenge_final)/images/bar.jpg
 
 - name: laser_integration
   lib: libed_laser_plugin.so

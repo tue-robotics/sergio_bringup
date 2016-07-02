@@ -2,6 +2,11 @@
 
 <launch>
 
+	<!-- TRIGGER -->
+	<include file="$(find robot_launch_files)/launch/multirobot/trigger.launch">
+		<arg name="machine" value="sergio1" />
+	</include>
+
     <group ns="sergio">
 
         <!-- Syncing of ed XMLRCP Server -->
