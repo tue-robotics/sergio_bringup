@@ -4,6 +4,13 @@ world_name: empty
 
 plugins:
 
+- name: localization
+  lib: libed_localization_tf_plugin.so
+  enabled: 1
+  frequency: 40
+  parameters:
+      robot_name: sergio
+
 - name: robot_plugin
   lib: libed_robot_plugin.so
   parameters:
