@@ -178,4 +178,4 @@ plugins:
           alpha5: 0.5    # trans -> strafe
 
 - name: perception
-  lib: libed_perception_plugin.so
+  lib: libed_perception_plugin_image_recognition.so
