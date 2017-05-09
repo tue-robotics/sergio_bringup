@@ -32,7 +32,7 @@ laser_controller:
     joint_name: laser_joint
     joint_speed: 0.13
     motor:
-        id: 2
+        id: 3
         init: 616
         min: 616
         max: 678
