@@ -1,4 +1,4 @@
 serial_port: /dev/sensors/hokuyo_busid_1-1.2
 frame_id: /sergio/base_laser
-min_ang: -1.37
-max_ang: 1.37
+angle_min: -1.37
+angle_max: 1.37
