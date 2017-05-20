@@ -37,8 +37,8 @@ stream("Supervisor.ebuttonWireless", ros.topic(ROBOT+"/ebuttonWireless"));
 stream("Supervisor.ebuttonWired", ros.topic(ROBOT+"/ebuttonWired"));
 stream("Supervisor.ebuttonEndswitch", ros.topic(ROBOT+"/ebuttonEndswitch"));
 stream("Supervisor.ebuttonReset", ros.topic(ROBOT+"/ebuttonReset"));
-stream("Supervisor.rosshutdown", ros.topic(ROBOT+"/etherCAT_shutdown")); 
-stream("Supervisor.rosetherCATenabled", ros.topic(ROBOT+"/etherCAT_enabled")); 
+stream("Supervisor.rosshutdown", ros.topic(ROBOT+"/etherCAT_shutdown"));
+stream("Supervisor.rosetherCATenabled", ros.topic(ROBOT+"/etherCAT_enabled"));
 stream("Supervisor.hardware_status", ros.topic(ROBOT+"/hardware_status"));
 stream("Supervisor.dashboardCmd", ros.topic(ROBOT+"/dashboard_ctrlcmds"));
 stream("Supervisor.ebutton_status", ros.topic(ROBOT+"/ebutton_status"));
@@ -51,6 +51,7 @@ Supervisor.CreateRobotObject("sergio", DEFAULT_PART_NAMES)
 ### LOAD SOEM COMPONENT FOR ETHERCAT COMMUNICATION ###
 loadComponent("Soem","soem_master::SoemMasterComponent")
 addPeer("Supervisor","Soem")
+Soem.ifname="enp3s0"
 Soem.configure
 setActivity("Soem",TS,HighestPriority,ORO_SCHED_RT)
 connect ("Soem.Slave_1001.encoder1", "Supervisor.serialRunning", ConnPolicy() ) ;
@@ -84,7 +85,7 @@ EmergencyToRos.configure;
 
 connect ("AnalogIns.stdvect_out_3", "EmergencyToRos.in1", ConnPolicy() )
 stream("EmergencyToRos.outmsg1", ros.topic(ROBOT+"/ebuttonEndswitch"))
-stream("EmergencyToRos.outmsg2", ros.topic(ROBOT+"/ebuttonWired")); 
+stream("EmergencyToRos.outmsg2", ros.topic(ROBOT+"/ebuttonWired"));
 stream("EmergencyToRos.outmsg3", ros.topic(ROBOT+"/ebuttonReset"))
 stream("EmergencyToRos.outmsg4", ros.topic(ROBOT+"/ebuttonWireless"))
 
@@ -114,16 +115,15 @@ var int ENCODERCOUNTS_T		= 500*4;						# Counts per cycle
 var double GEARBOX_LOWER 	= 2.0/5.0; 						# Motor to drive train
 var double GEARBOX_UPPER 	= 3.0/13.0; 					# Motor to drive train
 var double METER2RAD		= 500.0*TWOPI;				# translation to rotation (rad/m)
-var array ENC2METER			= array(TWOPI/ENCODERCOUNTS_T*GEARBOX_LOWER/METER2RAD, 
+var array ENC2METER			= array(TWOPI/ENCODERCOUNTS_T*GEARBOX_LOWER/METER2RAD,
 								TWOPI/ENCODERCOUNTS_T*GEARBOX_UPPER/METER2RAD);
 
 loadComponent("TORSO_ReadEncoders","SOEM::ReadEncoders")
 addPeer("Supervisor","TORSO_ReadEncoders")
 setActivity("TORSO_ReadEncoders",TS,HighestPriority,ORO_SCHED_RT)
 TORSO_ReadEncoders.encoderbits = ENCODERBITS_T
-TORSO_ReadEncoders.enc2SI = ENC2METER; 
+TORSO_ReadEncoders.enc2SI = ENC2METER;
 TORSO_ReadEncoders.configure
-
 connect (TORSO_SLAVE_1+".encoder1","TORSO_ReadEncoders.enc1_in", ConnPolicy() )
 connect (TORSO_SLAVE_1+".encoder2","TORSO_ReadEncoders.enc2_in", ConnPolicy() )
 
@@ -142,10 +142,10 @@ stream("CaliphersIn.rosmsg_out_1", ros.topic(ROBOT+"/caliphers"))
 
 
 #### START COMPONENTS ####
-Supervisor.AddAllwaysOnPeer ("Soem")
-Supervisor.AddAllwaysOnPeer ("BASE_ReadEncoders")
-Supervisor.AddAllwaysOnPeer ("TORSO_ReadEncoders")
-Supervisor.AddAllwaysOnPeer ("CaliphersIn")
-Supervisor.AddAllwaysOnPeer ("AnalogIns")
-Supervisor.AddAllwaysOnPeer ("EmergencyToRos")
+Soem.start()
+BASE_ReadEncoders.start()
+TORSO_ReadEncoders.start()
+CaliphersIn.start()
+AnalogIns.start()
+EmergencyToRos.start()
 Supervisor.start()

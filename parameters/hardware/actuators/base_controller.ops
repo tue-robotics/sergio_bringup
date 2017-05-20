@@ -273,75 +273,78 @@ BASE_ThermalToSafety.direct_to_ROS = true;
 BASE_ThermalToSafety.configure;
 
 
-
 #### CONNECT COMPONENTS ####
 # Control loop
-connect ("BASE_ReadEncoders.vel",	"BASE_MotorToJointSpace.in", ConnPolicy() )
-connect ("BASE_MotorToJointSpace.out",	"BASE_Controller.pos_in", ConnPolicy() ); #[m \n m \n rad]
-connect ("BASE_Controller.out",			"BASE_JointToMotorSpace.in", ConnPolicy() )
-#connect ("BASE_Notch.out",				"BASE_JointToMotorSpace.in", ConnPolicy() )
-connect ("BASE_JointToMotorSpace.out",	"BASE_SI2Bits.in", ConnPolicy() )
-connect ("BASE_SI2Bits.out", 			"BASE_AddOffset.in1_ev", 	ConnPolicy() );
-connect ("BASE_AnalogOffset.out", 		"BASE_AddOffset.in2", 		ConnPolicy() );
-connect ("BASE_AddOffset.out", 			"BASE_AnalogOuts.in1", 		ConnPolicy() );
-connect ("BASE_AnalogOuts.out1", 		BASE_SLAVE_1 +".analogOuts", ConnPolicy() );
-connect ("BASE_AnalogOuts.out2", 		BASE_SLAVE_2 +".analogOuts", ConnPolicy() );
+connect ("BASE_ReadEncoders.vel",			"BASE_MotorToJointSpace.in", 		ConnPolicy() )
+connect ("BASE_MotorToJointSpace.out",		"BASE_Controller.pos_in", 			ConnPolicy() ); #[m \n m \n rad]
+connect ("BASE_Controller.out",				"BASE_JointToMotorSpace.in", 		ConnPolicy() )
+#connect ("BASE_Notch.out",					"BASE_JointToMotorSpace.in", 		ConnPolicy() )
+connect ("BASE_JointToMotorSpace.out",		"BASE_SI2Bits.in", 					ConnPolicy() )
+connect ("BASE_SI2Bits.out", 				"BASE_AddOffset.in1_ev", 			ConnPolicy() );
+connect ("BASE_AnalogOffset.out", 			"BASE_AddOffset.in2", 				ConnPolicy() );
+connect ("BASE_AddOffset.out", 				"BASE_AnalogOuts.in1", 				ConnPolicy() );
+connect ("BASE_AnalogOuts.out1", 			BASE_SLAVE_1 +".analogOuts", 		ConnPolicy() );
+connect ("BASE_AnalogOuts.out2", 			BASE_SLAVE_2 +".analogOuts", 		ConnPolicy() );
 
 # Safety
-connect ("BASE_Controller.jointErrors",			"BASE_ErrorFilter.in", 			ConnPolicy() ); # jointerrors
-connect ("BASE_ErrorFilter.out",				"BASE_Safety.jointErrors", 		ConnPolicy() ); # jointerrors
-connect ("BASE_AddOffset.out",			"BASE_Safety.controlEffort",ConnPolicy() )
-connect ("BASE_ThermalSensor.out",	"BASE_ThermalToSafety.in1",ConnPolicy() )
-connect ("BASE_ThermalToSafety.outmsg1",	"BASE_Safety.motor_temperature",ConnPolicy() )
-connect ("BASE_Safety.error",			"Supervisor.base_error", 	ConnPolicy() ); # error
-connect ("BASE_Safety.enable",			"BASE_Controller.enable", 	ConnPolicy() ); # error
-connect ("BASE_Safety.enable", 			BASE_SLAVE_1+".enablePort", ConnPolicy() ); 
-connect ("BASE_Safety.enable", 			BASE_SLAVE_2+".enablePort", ConnPolicy() ); 
-connect ("BASE_Safety.enable", 			"BASE_DigitalOuts.in1", ConnPolicy() ); 
-connect ("BASE_Safety.enable", 			"BASE_DigitalOuts.in2", ConnPolicy() ); 
-connect ("BASE_DigitalOuts.digital_out", BASE_SLAVE_1+".digitalOuts", ConnPolicy() ); 
-connect ("BASE_DigitalOuts.digital_out", BASE_SLAVE_2+".digitalOuts", ConnPolicy() ); 
+connect ("BASE_Controller.jointErrors",		"BASE_ErrorFilter.in", 				ConnPolicy() ); # jointerrors
+connect ("BASE_ErrorFilter.out",			"BASE_Safety.jointErrors", 			ConnPolicy() ); # jointerrors
+connect ("BASE_AddOffset.out",				"BASE_Safety.controlEffort",		ConnPolicy() )
+connect ("BASE_ThermalSensor.out",			"BASE_ThermalToSafety.in1",			ConnPolicy() )
+connect ("BASE_ThermalToSafety.outmsg1", 	"BASE_Safety.motor_temperature",	ConnPolicy() )
+connect ("BASE_Safety.error",				"Supervisor.base_error", 			ConnPolicy() ); # error
+connect ("BASE_Safety.enable",				"BASE_Controller.enable", 			ConnPolicy() ); # error
+connect ("BASE_Safety.enable", 				BASE_SLAVE_1+".enablePort", 		ConnPolicy() ); 
+connect ("BASE_Safety.enable", 				BASE_SLAVE_2+".enablePort", 		ConnPolicy() ); 
+connect ("BASE_Safety.enable", 				"BASE_DigitalOuts.in1", 			ConnPolicy() ); 
+connect ("BASE_Safety.enable", 				"BASE_DigitalOuts.in2", 			ConnPolicy() ); 
+connect ("BASE_DigitalOuts.digital_out", 	BASE_SLAVE_1+".digitalOuts", 		ConnPolicy() ); 
+connect ("BASE_DigitalOuts.digital_out", 	BASE_SLAVE_2+".digitalOuts", 		ConnPolicy() ); 
 
 # Reference signal
-stream ("BASE_ReadReferences.cmd_vel", 	ros.topic(ROBOT+"/base/references"));
-connect ("BASE_ReadReferences.out",		"BASE_Controller.ref_in1", ConnPolicy() );
+stream ("BASE_ReadReferences.cmd_vel", 		ros.topic(ROBOT+"/base/references"));
+connect ("BASE_ReadReferences.out",			"BASE_Controller.ref_in1", 			ConnPolicy() );
 
 # Diagnostics
-connect ("BASE_ReadEncoders.out",		"BASE_MotorToJointSpacePos.in", ConnPolicy() )
-connect ("BASE_MotorToJointSpacePos.out", 	"BASE_OdometryPublisher.pos", ConnPolicy() );
-stream ("BASE_OdometryPublisher.odom", 	ros.topic(ROBOT+"/base/measurements"));
-stream ("BASE_OdometryPublisher.reset", ros.topic(ROBOT+"/base/reset_odometry"));
-connect ("BASE_ReadReferences.out", 	"BASE_Diagnostics.vec1", ConnPolicy() )
-connect ("BASE_Controller.jointErrors", "BASE_Diagnostics.vec2", ConnPolicy() )
-connect ("BASE_SI2Bits.out", 			"BASE_Diagnostics.vec3", ConnPolicy() )
-stream ("BASE_Diagnostics.diagnostics", ros.topic(ROBOT+"/base_diagnostics"));
+connect ("BASE_ReadEncoders.out",			"BASE_MotorToJointSpacePos.in", 	ConnPolicy() )
+connect ("BASE_MotorToJointSpacePos.out",	"BASE_OdometryPublisher.pos", 		ConnPolicy() );
+stream ("BASE_OdometryPublisher.odom", 		ros.topic(ROBOT+"/base/measurements"));
+stream ("BASE_OdometryPublisher.reset", 	ros.topic(ROBOT+"/base/reset_odometry"));
+connect ("BASE_ReadReferences.out", 		"BASE_Diagnostics.vec1", 			ConnPolicy() )
+connect ("BASE_Controller.jointErrors", 	"BASE_Diagnostics.vec2", 			ConnPolicy() )
+connect ("BASE_SI2Bits.out", 				"BASE_Diagnostics.vec3", 			ConnPolicy() )
+stream ("BASE_Diagnostics.diagnostics", 	ros.topic(ROBOT+"/base_diagnostics"));
 
 # Thermal sensor
-connect ("AnalogIns.stdvect_out_2", "BASE_ThermalSensor.in", ConnPolicy() )
-connect ("BASE_ThermalSensor.out", "BASE_ThermalToROS.in", ConnPolicy() )
-stream("BASE_ThermalToROS.out1", ros.topic(ROBOT+"/base/temperature"))
+connect ("AnalogIns.stdvect_out_2", 		"BASE_ThermalSensor.in", 			ConnPolicy() )
+connect ("BASE_ThermalSensor.out", 			"BASE_ThermalToROS.in", 			ConnPolicy() )
+stream("BASE_ThermalToROS.out1", 			ros.topic(ROBOT+"/base/temperature"))
 
 #### START COMPONENTS ####
+
 # Control loop
-Supervisor.AddAllwaysOnPeer ("BASE_MotorToJointSpace")
+BASE_MotorToJointSpace.start()
+BASE_SI2Bits.start()
+BASE_AnalogOffset.start()
+BASE_AddOffset.start()
+BASE_AnalogOuts.start()
 Supervisor.AddEnabledPeer   ("BASE_Controller",			BODYPARTNR)
 Supervisor.AddEnabledPeer 	("BASE_JointToMotorSpace", 	BODYPARTNR)
-Supervisor.AddAllwaysOnPeer ("BASE_SI2Bits" )
-Supervisor.AddAllwaysOnPeer ("BASE_AnalogOffset")
-Supervisor.AddAllwaysOnPeer ("BASE_AddOffset")
-Supervisor.AddAllwaysOnPeer ("BASE_AnalogOuts")
+
 # Reference
 Supervisor.AddEnabledPeer   ("BASE_ReadReferences",		BODYPARTNR )
+
 # Safety 
-Supervisor.AddAllwaysOnPeer ("BASE_ThermalSensor")
-Supervisor.AddAllwaysOnPeer ("BASE_ThermalToROS")
-Supervisor.AddAllwaysOnPeer ("BASE_ThermalToSafety")
+BASE_ThermalSensor.start()
+BASE_ThermalToROS.start()
+BASE_ThermalToSafety.start()
 Supervisor.AddEnabledPeer  	("BASE_ErrorFilter", 		BODYPARTNR)
 Supervisor.AddEnabledPeer  	("BASE_Safety", 			BODYPARTNR)
+
 # Diagnostics
-Supervisor.AddAllwaysOnPeer ("BASE_MotorToJointSpacePos")
-Supervisor.AddAllwaysOnPeer ("BASE_OdometryPublisher")
-Supervisor.AddAllwaysOnPeer ("BASE_Diagnostics")
-Supervisor.AddAllwaysOnPeer ("BASE_DigitalOuts")
+BASE_MotorToJointSpacePos.start()
+BASE_OdometryPublisher.start()
+BASE_Diagnostics.start()
+BASE_DigitalOuts.start()
 
 
