@@ -4,20 +4,20 @@
 
     <group ns="sergio">
 
-		<!-- NAVIGATION -->
-		<include file="$(find robot_launch_files)/launch/navigation/navigation.launch">
-			<arg name="machine" value="sergio2"/>
-		</include>
+        <!-- NAVIGATION -->
+        <include file="$(find robot_launch_files)/launch/navigation/navigation.launch">
+            <arg name="machine" value="sergio2"/>
+        </include>
 
-		<!-- WORLD MODEL -->
-		<include file="$(find robot_launch_files)/launch/world_modeling/world_model.launch">
-			<arg name="machine" value="sergio2"/>
-		</include>
+        <!-- WORLD MODEL -->
+        <include file="$(find robot_launch_files)/launch/world_modeling/world_model.launch">
+            <arg name="machine" value="sergio2"/>
+        </include>
 
-		<!-- Joke -->
-		<include file="$(find robot_launch_files)/launch/essentials/joke.launch" >
-			<arg name="machine" value="sergio2" />
-		</include>
+        <!-- Joke -->
+        <include file="$(find robot_launch_files)/launch/essentials/joke.launch" >
+            <arg name="machine" value="sergio2" />
+        </include>
 
     </group>
 
