@@ -75,7 +75,7 @@
         </include>
         <!-- SPEECH RECOGNITION -->
         <include file="$(find robot_launch_files)/launch/interaction/speech_recognition.launch">
-            <arg name="machine" value="sergio2"/>
+            <arg name="machine" value="sergio1"/>
         </include>
 
 	<group unless="$(optenv ROBOT_REAL false)">
