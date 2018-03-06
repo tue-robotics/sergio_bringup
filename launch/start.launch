@@ -85,6 +85,12 @@
                 <arg name="machine-tts" value="sergio1"/>
                 <arg name="machine-play" value="sergio1"/>
             </include>
+
+	    <!-- rgbd to ros -->
+            <include file="$(find robot_launch_files)/launch/essentials/rgbd_to_ros.launch">
+                <arg name="name" value="top_kinect"/>
+                <arg name="machine" value="sergio1"/>
+            </include>
 	</group>
 
         <!-- DIAGNOSTICS -->

@@ -5,29 +5,34 @@
 
     <group ns="sergio">
 
-	<group if="$(optenv ROBOT_REAL false)">
-            <!-- SENSORS -->
-            <include file="$(find robot_launch_files)/launch/hardware/sensors/kinect.launch">
-                <arg name="name" value="top_kinect"/>
-                <arg name="machine" value="sergio2"/>
-                <arg name="gdb" value="true"/>
-            </include>
+        <!-- SENSORS -->
+        <include file="$(find robot_launch_files)/launch/hardware/sensors/kinect.launch">
+            <arg name="name" value="top_kinect"/>
+            <arg name="machine" value="sergio2"/>
+            <arg name="gdb" value="true"/>
+        </include>
 
-            <include file="$(find robot_launch_files)/launch/hardware/sensors/laser.launch">
-                <arg name="name" value="back_laser"/>
-                <arg name="machine" value="sergio2"/>
-            </include>
+        <include file="$(find robot_launch_files)/launch/hardware/sensors/laser.launch">
+            <arg name="name" value="back_laser"/>
+            <arg name="machine" value="sergio2"/>
+        </include>
 
-            <include file="$(find robot_launch_files)/launch/hardware/sensors/laser.launch">
-                <arg name="name" value="torso_laser"/>
-                <arg name="machine" value="sergio2"/>
-            </include>
-        </group>
+        <include file="$(find robot_launch_files)/launch/hardware/sensors/laser.launch">
+            <arg name="name" value="torso_laser"/>
+            <arg name="machine" value="sergio2"/>
+        </include>
 
         <!-- TEXT TO SPEECH -->
         <include file="$(find robot_launch_files)/launch/interaction/text_to_speech.launch">
             <arg name="machine-tts" value="sergio2"/>
             <arg name="machine-play" value="sergio2"/>
         </include>
+
+        <!-- rgbd to ros -->
+        <include file="$(find robot_launch_files)/launch/essentials/rgbd_to_ros.launch">
+            <arg name="name" value="top_kinect"/>
+            <arg name="machine" value="sergio2"/>
+        </include>
+
     </group>
 </launch>
