@@ -5,6 +5,11 @@
 
     <group ns="sergio">
 
+	<!-- Dynamixels -->
+        <include file="$(find robot_launch_files)/launch/hardware/dynamixels.launch" >
+	    <arg name="machine" value="sergio2"/>
+        </include>
+
         <!-- SENSORS -->
         <include file="$(find robot_launch_files)/launch/hardware/sensors/kinect.launch">
             <arg name="name" value="top_kinect"/>

@@ -36,8 +36,6 @@
                 <arg name="machine" value="sergio1" />
             </include>
 
-            <include file="$(find robot_launch_files)/launch/hardware/dynamixels.launch" />
-
         <node name="level_torso" pkg="sergio_hardware" type="torso_laser_leveler.py" />
 
             <!-- MANAGERS -->
