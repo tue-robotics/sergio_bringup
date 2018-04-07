@@ -35,6 +35,18 @@ plugins:
           min_distance: 0.45
           max_distance: 2.0
 
+- name: kinect_navigation
+  lib: libed_kinect_navigation_plugin.so
+  parameters:
+      depth_sensor_integration:
+          frame_id: /map
+          topic: /sergio/top_kinect/rgbd
+          num_samples: 640
+          slope_threshold: 1
+          slope_window_size: 30
+          min_distance: 0.4
+          max_distance: 2.0
+
 - name: tf_publisher
   lib: libed_tf_publisher_plugin.so
   parameters:
