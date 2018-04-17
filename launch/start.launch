@@ -36,8 +36,6 @@
                 <arg name="machine" value="sergio1" />
             </include>
 
-            <include file="$(find robot_launch_files)/launch/hardware/dynamixels.launch" />
-
         <node name="level_torso" pkg="sergio_hardware" type="torso_laser_leveler.py" />
 
             <!-- MANAGERS -->
@@ -50,27 +48,11 @@
             </include>
 
             <!-- SENSORS -->
-            <!--
-            <include file="$(find robot_launch_files)/launch/hardware/sensors/kinect.launch">
-                <arg name="name" value="top_kinect"/>
-                <arg name="machine" value="sergio2"/>
-                <arg name="gdb" value="true"/>
-            </include>
-            -->
             <include file="$(find robot_launch_files)/launch/hardware/sensors/laser.launch">
                 <arg name="name" value="base_laser"/>
                 <arg name="machine" value="sergio1"/>
             </include>
-            <!--
-            <include file="$(find robot_launch_files)/launch/hardware/sensors/laser.launch">
-                <arg name="name" value="back_laser"/>
-                <arg name="machine" value="sergio2"/>
-            </include>
-            <include file="$(find robot_launch_files)/launch/hardware/sensors/laser.launch">
-                <arg name="name" value="torso_laser"/>
-                <arg name="machine" value="sergio2"/>
-            </include>
-            -->
+
         </group>
 
         <!-- Launch simulator if we are not on a real robot -->
@@ -83,25 +65,26 @@
 
         </group>
 
-
-        <!-- rgbd to ros -->
-        <!--
-        <include file="$(find robot_launch_files)/launch/essentials/rgbd_to_ros.launch">
-            <arg name="name" value="top_kinect"/>
+        <!-- SPEECH RECOGNITION -->
+        <include file="$(find robot_launch_files)/launch/interaction/speech_recognition.launch">
             <arg name="machine" value="sergio1"/>
         </include>
-        -->
-        <!-- SPEECH RECOGNITION -->
-        <!--
-        <include file="$(find robot_launch_files)/launch/interaction/speech_recognition.launch">
-            <arg name="machine" value="sergio2"/>
-        </include>
-        -->
-        <!-- TEXT TO SPEECH -->
-        <include file="$(find robot_launch_files)/launch/interaction/text_to_speech.launch">
-            <arg name="machine-tts" value="sergio2"/>
-            <arg name="machine-play" value="sergio2"/>
-        </include>
+
+	<group unless="$(optenv ROBOT_REAL false)">
+	<!-- Running on SERGIO2, but needs to be run on Simulator -->
+            <!-- TEXT TO SPEECH -->
+            <include file="$(find robot_launch_files)/launch/interaction/text_to_speech.launch">
+                <arg name="machine-tts" value="sergio1"/>
+                <arg name="machine-play" value="sergio1"/>
+            </include>
+
+	    <!-- rgbd to ros -->
+            <include file="$(find robot_launch_files)/launch/essentials/rgbd_to_ros.launch">
+                <arg name="name" value="top_kinect"/>
+                <arg name="machine" value="sergio1"/>
+            </include>
+	</group>
+
         <!-- DIAGNOSTICS -->
         <!--
         <include file="$(find robot_launch_files)/launch/diagnostics/diagnostics.launch" >

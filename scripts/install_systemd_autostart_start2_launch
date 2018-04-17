@@ -1,0 +1,13 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+sudo cp $DIR/*.service /etc/systemd/system/
+
+# Reload and enable
+sudo systemctl daemon-reload
+sudo systemctl start sergio2-start.service
+sudo systemctl enable sergio2-start.service
+
+echo "Check the journal for the log"
+echo "sudo journalctl -fu [job_name, e.g. sergio2-start]"

@@ -2,7 +2,7 @@
 tts_module: philips
 philips_executable: /home/amigo/ros/kinetic/system/src/philips_text_to_speech/sergio/ptts_v911.exe
 
-character: man
+character: default
 language: us
 voice: kyle
 emotion: neutral
