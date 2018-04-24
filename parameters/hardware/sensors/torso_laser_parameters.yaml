@@ -1,4 +1,4 @@
-serial_port: /dev/sensors/hokuyo_busid_3-3
+serial_port: /dev/sensors/hokuyo_busid_1-1.1
 frame_id: /sergio/torso_laser
 angle_min: -1.884955592153876
 angle_max: 1.884955592153876

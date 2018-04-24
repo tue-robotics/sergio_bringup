@@ -1,0 +1,10 @@
+[Unit]
+Description=SERGIO start.launch
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+User=amigo
+Restart=on-abort
+ExecStart=/bin/bash -c 'source /home/amigo/.tue/setup.bash && roslaunch sergio_bringup start2.launch --wait'
