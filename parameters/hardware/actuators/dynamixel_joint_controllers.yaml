@@ -1,5 +1,5 @@
 dynamixel_manager:
-namespace: dxl_manager
+    namespace: dxl_manager
     serial_ports:
         pan_tilt_laser_port:
             port_name: "/dev/ttyUSB0"
