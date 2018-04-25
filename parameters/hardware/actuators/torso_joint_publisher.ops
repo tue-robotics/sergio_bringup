@@ -27,18 +27,21 @@ var string	ROBOT 			= os.getenv("ROBOT")
 
 # Motor, gearbox and encoder specs
 var double 	TWOPI 			= 2.0*3.141592
-var int ENCODERBITS 		= 65536;					# Max encoderbits (16 bits)
+var int ENCODERBITS 		= 65536;						# Max encoderbits (16 bits)
 var int ENCODERCOUNTS		= 500*4;						# Counts per cycle
-var double GEARBOX_LOWER 	= 2.0/5.0; 						# Motor to drive train
-var double GEARBOX_UPPER 	= 3.0/13.0; 					# Motor to drive train
-var double METER2RAD		= 500.0*TWOPI;				# translation to rotation (rad/m)
+#var double GEARBOX_LOWER 	= 2.0/5.0; 						# Motor to drive train
+#var double GEARBOX_UPPER 	= 3.0/13.0; 					# Motor to drive train
+var double GEARBOX_LOWER 	= 1.0/8.75; 					# Motor to drive train
+var double GEARBOX_UPPER 	= 1.0/12.0; 					# Motor to drive train
+var double METER2RAD		= 500.0*TWOPI;					# translation to rotation (rad/m)
 var array ENC2METER			= array(TWOPI/ENCODERCOUNTS*GEARBOX_LOWER/METER2RAD, 
-								TWOPI/ENCODERCOUNTS*GEARBOX_UPPER/METER2RAD);
+								    TWOPI/ENCODERCOUNTS*GEARBOX_UPPER/METER2RAD);
 var int NBITS 				= 8; 						# number of bits to the backhoff stack (Brake)
 var array SI2BITS 			= array(-1.0,-1.0);
 #var array VOLT2BITS 		= array(-5.0/1023.0, -5.0/1023.0) 
 var array VOLT2BITS 		= array(-1023.0/5.0, -1023.0/5.0) 
-var array OFFSET_CALIPHERS 	= array(0.25030, -0.33840);
+#var array OFFSET_CALIPHERS 	= array(0.25030, -0.33840);
+var array OFFSET_CALIPHERS 	= array(-0.2254, -0.22137);
 
     # Refrence generator
 var int N_JOINTS                = 2;
