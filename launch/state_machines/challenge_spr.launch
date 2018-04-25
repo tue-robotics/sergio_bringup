@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<launch>
+
+        <group ns="sergio">
+
+                <!-- ROBOCUP RECORDER -->
+                <include file="$(find robot_launch_files)/launch/essentials/record_robocup.launch">
+                        <arg name="machine" value="sergio2" />
+                </include>
+
+                <!-- NAVIGATION -->
+                <include file="$(find robot_launch_files)/launch/navigation/navigation.launch">
+                        <arg name="machine" value="sergio2"/>
+                </include>
+
+                <!-- WORLD MODEL -->
+                <include file="$(find robot_launch_files)/launch/world_modeling/world_model.launch">
+                        <arg name="machine" value="sergio2"/>
+                        <arg name="config" value="world_modeling/world_model_spr.yaml"/>
+                </include>
+
+        </group>
+
+        <!-- Start the challenge -->
+        <node pkg="challenge_spr" type="challenge_spr.py" name="state_machine" args="sergio" output="screen" required="true"/>
+
+</launch>
