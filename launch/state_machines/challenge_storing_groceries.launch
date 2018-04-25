@@ -1,11 +1,14 @@
 <?xml version="1.0"?>
 
-<!-- Checkout README.md to see when to use this launch file -->
-
 <launch>
 
     <group ns="sergio">
 
+        <!-- ROBOCUP RECORDER -->
+        <include file="$(find robot_launch_files)/launch/essentials/record_robocup.launch">
+            <arg name="machine" value="sergio2" />
+        </include>
+        
         <!-- NAVIGATION -->
         <include file="$(find robot_launch_files)/launch/navigation/navigation.launch">
             <arg name="machine" value="sergio2"/>
@@ -16,16 +19,9 @@
             <arg name="machine" value="sergio2"/>
         </include>
 
-        <!-- Joke -->
-        <include file="$(find robot_launch_files)/launch/essentials/joke.launch" >
-            <arg name="machine" value="sergio2" />
-        </include>
-
     </group>
 
-    <!-- Action server state machine -->
-    <node name="state_machine" pkg="action_server" type="main.py" output="log" required="true" >
-        <param name="robot_name" value="sergio"/>
-    </node>
+    <!-- Start the challenge -->
+    <node pkg="challenge_storing_groceries" type="challenge_storing_groceries" name="state_machine" args="sergio" output="screen" required="true"/>
 
 </launch>
