@@ -30,9 +30,9 @@ neck_tilt:
     joint_speed: 0.8
     motor:
         id: 2
-        init: 380
+        init: 520
         min: 190
-        max: 570
+        max: 600
 
 torso_laser:
     controller:
