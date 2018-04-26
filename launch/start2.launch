@@ -16,6 +16,10 @@
                  torso_laser"/>
         </include>
 
+        <node name="republish_dynamixel_torso_jointstates" pkg="dynamixel_jointstate_conversion" type="republish_dynamixels_as_jointstates.py" required="true">
+            <remap to="torso_laser/state" from="dynamixel_topic"/>
+        </node>
+
         <!-- SENSORS -->
         <include file="$(find robot_launch_files)/launch/hardware/sensors/kinect.launch">
             <arg name="name" value="top_kinect"/>
