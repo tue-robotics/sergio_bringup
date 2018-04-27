@@ -19,7 +19,7 @@ neck_pan:
         id: 1
         init: 467
         min: 166
-        max: 770
+        max: 767
 
 neck_tilt:
     controller:
@@ -31,8 +31,8 @@ neck_tilt:
     motor:
         id: 2
         init: 520
-        min: 190
-        max: 600
+        min: 402
+        max: 650
 
 torso_laser:
     controller:
