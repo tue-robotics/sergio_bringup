@@ -14,7 +14,7 @@ neck_pan:
         module: joint_position_controller
         type: JointPositionController
     joint_name: neck_pan_joint
-    joint_speed: 1.0
+    joint_speed: 10
     motor:
         id: 1
         init: 467
@@ -27,7 +27,7 @@ neck_tilt:
         module: joint_position_controller
         type: JointPositionController
     joint_name: neck_tilt_joint
-    joint_speed: 0.8
+    joint_speed: 10
     motor:
         id: 2
         init: 520
@@ -40,7 +40,7 @@ torso_laser:
         module: joint_position_controller
         type: JointPositionController
     joint_name: laser_tilt_joint
-    joint_speed: 0.3
+    joint_speed: 0.1
     motor:
         id: 3
         init: 616
