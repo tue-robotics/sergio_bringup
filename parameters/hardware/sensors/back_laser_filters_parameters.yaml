@@ -12,6 +12,16 @@ scan_filter_chain:
         type: filters/MultiChannelMedianFilterFloat
         params:
           number_of_observations: 3
+- type: laser_filters/LaserScanBoxFilter
+  name: laser_box_filter
+  params:
+    box_frame: /sergio/base_link
+    min_x: -0.36
+    max_x: 0.34
+    min_y: -0.32
+    max_y: 0.32
+    min_z: 0.0
+    max_z: 2.0
 - name: shadows
   type: laser_filters/ScanShadowsFilter
   params:
