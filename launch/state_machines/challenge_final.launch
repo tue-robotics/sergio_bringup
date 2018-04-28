@@ -15,7 +15,6 @@
         <include file="$(find robot_launch_files)/launch/world_modeling/world_model.launch">
             <arg name="machine" value="sergio2"/>
             <arg name="faces_db" value="~/MEGA/data/$(optenv ROBOT_ENV rgo2018)/models/openface_ros/faces.pkl" />
-
         </include>
 
         <!-- Joke -->
@@ -23,8 +22,11 @@
             <arg name="machine" value="sergio2" />
         </include>
 
-        <include file="$(find telegram_robot)/launch/conversation_engine_bot.launch" >
-        </include>
+        <!-- Start the conversation engine bot. In simulation, you can talk using the topics of the conversation engine -->
+        <group if="$(optenv ROBOT_REAL false)">
+            <include file="$(find telegram_robot)/launch/conversation_engine_bot.launch" >
+            </include>
+        </group>
 
     </group>
 
@@ -33,6 +35,7 @@
         <param name="robot_name" value="sergio"/>
     </node>
 
+    <!-- Conversation engine -->
     <node name="conversation_engine" pkg="conversation_engine" type="engine" output="log" required="true" args="--robot sergio" />
 
 </launch>
