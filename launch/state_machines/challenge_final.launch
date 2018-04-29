@@ -18,15 +18,21 @@
 			<arg name="machine" value="sergio2" />
 		</include>
 
-		<!-- bridge to sergio telegram bot -->
-		<group if="$(optenv ROBOT_REAL false)">
-			<node name="telegram_ros_bridge" pkg="telegram_ros" type="telegram_ros_bridge" output="log" required="true">
-				<param name="token" value="558519631:AAGkU9jpTDUPnki2XGKxmVmwhr6KrII-xdc" />
-			</node>
-		</group>
-
 		<!-- Vieze node -->
 		<node name="vieze_node" pkg="challenge_final" type="dirty_node.py" output="log" respawn="true" />
+
+                
+                <!-- Slack ROS Bridge -->
+		<group if="$(optenv ROBOT_REAL false)">
+		    <node name="slack_ros_bridge" pkg="slack_ros" type="slack_ros_bridge" output="screen" respawn="true">
+			<param name="token" value="xoxb-354632550720-0xIVlhdZ92ATUaBaSKp6j2oO" />
+			<remap from="message_to_ros" to="message_from_telegram" />
+			<remap from="message_from_ros" to="message_to_telegram" />
+			<remap from="image_to_ros" to="photo_from_telegram" />
+			<remap from="image_from_ros" to="photo_to_telegram" />
+		    </node>
+		</group>
+
 	</group>
 
 	<node name="conversation_engine" pkg="conversation_engine" type="engine" output="log" required="true" args="--robot sergio">
