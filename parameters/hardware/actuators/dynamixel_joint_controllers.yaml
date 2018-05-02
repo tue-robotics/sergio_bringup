@@ -1,36 +1,46 @@
-pan_controller:
+dynamixel_manager:
+    namespace: dxl_manager
+    serial_ports:
+        pan_tilt_laser_port:
+            port_name: "/dev/ttyUSB0"
+            baud_rate: 57142
+            min_motor_id: 1
+            max_motor_id: 3
+            update_rate: 20
+
+neck_pan:
     controller:
         package: dynamixel_controllers
         module: joint_position_controller
         type: JointPositionController
-    joint_name: pan_joint
-    joint_speed: 0.26
+    joint_name: neck_pan_joint
+    joint_speed: 10
     motor:
         id: 1
         init: 467
         min: 166
-        max: 770
+        max: 767
 
-tilt_controller:
+neck_tilt:
     controller:
         package: dynamixel_controllers
         module: joint_position_controller
         type: JointPositionController
-    joint_name: tilt_joint
-    joint_speed: 0.13
+    joint_name: neck_tilt_joint
+    joint_speed: 10
     motor:
         id: 2
-        init: 380
-        min: 190
-        max: 570
+        init: 520
+        min: 402
+        max: 650
 
-laser_controller:
+torso_laser:
     controller:
         package: dynamixel_controllers
         module: joint_position_controller
         type: JointPositionController
-    joint_name: laser_joint
-    joint_speed: 0.13
+    joint_name: laser_tilt_joint
+    joint_speed: 0.1
     motor:
         id: 3
         init: 616

@@ -40,6 +40,7 @@
         <param name="number_of_tasks" value="$(arg number_of_tasks)" />
         <param name="test_mode" value="$(arg test_mode)" />
         <param name="time_limit" value="$(arg time_limit)" />
+        <param name="eegpsr" value="false"/>
     </node>
 
 </launch>

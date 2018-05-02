@@ -1,3 +1,4 @@
 tf_prefix: sergio
 default_pan: 0
 default_tilt: 0.5
+float_topics: true
