@@ -43,8 +43,8 @@
 
     <!--Start conversation engine-->
     <node name="conversation_engine" pkg="conversation_engine" type="engine" output="log" respawn="true" args="--robot sergio">
-        <remap from="robot_to_user" to="/sergio/message_to_telegram" />
-        <remap from="user_to_robot" to="/sergio/message_from_telegram" />
+        <remap from="robot_to_user" to="/sergio/message_to_user" />
+        <remap from="user_to_robot" to="/sergio/message_from_user" />
     </node>
 
     <!-- Start the action server -->
