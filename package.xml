@@ -12,6 +12,5 @@
 
   <build_depend>robot_launch_files</build_depend>
   <run_depend>robot_launch_files</run_depend>
-  <run_depend>dynamixel_jointstate_conversion</run_depend>
 
 </package>
