@@ -112,8 +112,12 @@ connect (BASE_SLAVE_2+".encoder2","BASE_ReadEncoders.enc4_in", ConnPolicy() ); #
 ### READ TORSO ENCODERS ###
 var int ENCODERBITS_T 		= 65536;					# Max encoderbits (16 bits)
 var int ENCODERCOUNTS_T		= 500*4;						# Counts per cycle
-var double GEARBOX_LOWER 	= 2.0/5.0; 						# Motor to drive train
-var double GEARBOX_UPPER 	= 3.0/13.0; 					# Motor to drive train
+#var double GEARBOX_LOWER 	= 2.0/5.0; 						# Motor to drive train
+#var double GEARBOX_UPPER 	= 3.0/13.0; 					# Motor to drive train
+
+
+var double GEARBOX_LOWER 	= 1.0/8.75; 					# Motor to drive train
+var double GEARBOX_UPPER 	= 1.0/12.0; 					# Motor to drive train
 var double METER2RAD		= 500.0*TWOPI;				# translation to rotation (rad/m)
 var array ENC2METER			= array(TWOPI/ENCODERCOUNTS_T*GEARBOX_LOWER/METER2RAD,
 								TWOPI/ENCODERCOUNTS_T*GEARBOX_UPPER/METER2RAD);
