@@ -23,6 +23,6 @@
     </group>
 
 	<!-- Start the challenge -->
-	<node pkg="challenge_help_me_carry" type="challenge_help_me_carry.py" name="state_machine" args="sergio" output="screen" required="true"/>
+	<node pkg="challenge_help_me_carry" type="challenge_help_me_carry2.py" name="state_machine" args="sergio" output="screen" required="true"/>
 
 </launch>
