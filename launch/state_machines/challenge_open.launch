@@ -1,36 +1,36 @@
-<?xml version="1.0"?>
-
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- Checkout README.md to see when to use this launch file -->
-
 <launch>
+	<group ns="sergio">
+		<!-- NAVIGATION -->
+		<include file="$(find robot_launch_files)/launch/navigation/navigation.launch">
+			<arg name="machine" value="sergio2" />
+		</include>
 
-    <group ns="sergio">
+		<!-- WORLD MODEL -->
+		<include file="$(find robot_launch_files)/launch/world_modeling/world_model.launch">
+			<arg name="machine" value="sergio2" />
+			<arg name="faces_db" value="~/MEGA/data/$(optenv ROBOT_ENV rgo2018)/models/openface_ros/faces.pkl" />
+		</include>
 
-        <!-- NAVIGATION -->
-        <include file="$(find robot_launch_files)/launch/navigation/navigation.launch">
-            <arg name="machine" value="sergio2"/>
-        </include>
+		<!-- Joke -->
+		<include file="$(find robot_launch_files)/launch/essentials/joke.launch">
+			<arg name="machine" value="sergio2" />
+		</include>
 
-        <!-- WORLD MODEL -->
-        <include file="$(find robot_launch_files)/launch/world_modeling/world_model.launch">
-            <arg name="machine" value="sergio2"/>
-        </include>
+		<node name="telegram_ros_bridge" pkg="telegram_ros" type="telegram_ros_bridge" output="log" respawn="true">
+			<param name="token" value="$(env TELEGRAM_TOKEN)" />
+		</node>
+		<node name="face_recognizer" pkg="challenge_final" type="face_recognizer.py" output="log" respawn="true" />
+	</group>
 
-        <!-- Joke -->
-        <include file="$(find robot_launch_files)/launch/essentials/joke.launch" >
-            <arg name="machine" value="sergio2" />
-        </include>
+	<node name="conversation_engine" pkg="conversation_engine" type="engine" output="log" required="true" args="--robot sergio">
+		<remap from="robot_to_user" to="/sergio/message_from_ros" />
+		<remap from="user_to_robot" to="/sergio/message_to_ros" />
+	</node>
 
-        <include file="$(find telegram_robot)/launch/conversation_engine_bot.launch" >
-        </include>
-
-    </group>
-
-    <!-- Action server state machine -->
-    <node name="state_machine" pkg="action_server" type="main.py" output="log" required="true" >
-        <param name="robot_name" value="sergio"/>
-    </node>
-
-    <node name="conversation_engine" pkg="conversation_engine" type="engine" output="log" required="true" args="--robot sergio" />
-
+	<!-- Action server state machine -->
+	<node name="state_machine" pkg="action_server" type="main.py" output="log" required="false" respawn="true">
+		<param name="robot_name" value="sergio" />
+	</node>
 </launch>
