@@ -56,5 +56,9 @@
             <arg name="machine" value="sergio2"/>
         </include>
 
+        <node name="telegram_ros_bridge" pkg="telegram_ros" type="telegram_ros_bridge" output="log" respawn="true">
+            <param name="token" value="$(env TELEGRAM_TOKEN)" />
+        </node>
+
     </group>
 </launch>
