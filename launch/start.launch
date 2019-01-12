@@ -70,20 +70,20 @@
             <arg name="machine" value="sergio1"/>
         </include>
 
-	<group unless="$(optenv ROBOT_REAL false)">
-	<!-- Running on SERGIO2, but needs to be run on Simulator -->
-            <!-- TEXT TO SPEECH -->
-            <include file="$(find robot_launch_files)/launch/interaction/text_to_speech.launch">
-                <arg name="machine-tts" value="sergio1"/>
-                <arg name="machine-play" value="sergio1"/>
-            </include>
+        <group unless="$(optenv ROBOT_REAL false)">
+        <!-- Running on SERGIO2, but needs to be run on Simulator -->
+                <!-- TEXT TO SPEECH -->
+                <include file="$(find robot_launch_files)/launch/interaction/text_to_speech.launch">
+                    <arg name="machine-tts" value="sergio1"/>
+                    <arg name="machine-play" value="sergio1"/>
+                </include>
 
-	    <!-- rgbd to ros -->
-            <include file="$(find robot_launch_files)/launch/essentials/rgbd_to_ros.launch">
-                <arg name="name" value="top_kinect"/>
-                <arg name="machine" value="sergio1"/>
-            </include>
-	</group>
+            <!-- rgbd to ros -->
+                <include file="$(find robot_launch_files)/launch/essentials/rgbd_to_ros.launch">
+                    <arg name="name" value="top_kinect"/>
+                    <arg name="machine" value="sergio1"/>
+                </include>
+        </group>
 
         <!-- DIAGNOSTICS -->
         <!--
