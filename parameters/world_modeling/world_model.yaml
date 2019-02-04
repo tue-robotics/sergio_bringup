@@ -4,6 +4,14 @@ world_name: $(env ROBOT_ENV)
 
 plugins:
 
+- name: robot_plugin
+  lib: libed_robot_plugin.so
+  parameters:
+      robot_name: sergio
+      urdf_rosparam: /sergio/robot_description
+      joint_topics:
+        - topic: /sergio/joint_states
+
 - name: gui_server
   lib: libed_gui_server_plugin.so
   parameters:
