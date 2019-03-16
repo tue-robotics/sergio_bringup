@@ -15,6 +15,8 @@ plugins:
   lib: libed_gui_server_plugin.so
   parameters:
       robot_name: sergio
+      urdf_rosparam: /sergio/robot_description
+      tf_prefix: /sergio
 
 - name: tf_publisher
   lib: libed_tf_publisher_plugin.so
