@@ -4,7 +4,9 @@
 
 <launch>
 
-    <group ns="sergio">
+    <arg name="robot_name" value="sergio" />
+
+    <group ns="$(arg robot_name)">
 
         <!-- NAVIGATION -->
         <include file="$(find robot_launch_files)/launch/navigation/navigation.launch">
@@ -16,12 +18,20 @@
             <arg name="machine" value="sergio2"/>
         </include>
 
+        <!-- IMAGE RECOGNITION -->
+        <include file="$(find robot_launch_files)/launch/world_modeling/image_recognition.launch">
+            <arg name="machine" value="sergio2"/>
+        </include>
+
+        <!-- PEOPLE RECOGNITION -->
+        <include file="$(find robot_launch_files)/launch/world_modeling/people_recognition.launch">
+            <arg name="machine" value="sergio2"/>
+            <arg name="robot_name" value="$(arg robot_name)" />
+        </include>
+
         <!-- Joke -->
         <include file="$(find robot_launch_files)/launch/essentials/joke.launch" >
             <arg name="machine" value="sergio2" />
-        </include>
-
-        <include file="$(find telegram_robot)/launch/conversation_engine_bot.launch" >
         </include>
 
     </group>
