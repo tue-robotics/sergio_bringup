@@ -2,7 +2,9 @@
 
 <launch>
 
-    <group ns="sergio">
+    <arg name="robot_name" value="sergio" />
+
+    <group ns="$(arg robot_name)">
 
         <!-- LOCALIZATION GMAPPING -->
         <include file="$(find robot_launch_files)/launch/localization/gmapping.launch">
@@ -19,6 +21,17 @@
         <include file="$(find robot_launch_files)/launch/world_modeling/world_model.launch">
             <arg name="machine" value="sergio2"/>
             <arg name="config" value="world_modeling/world_model_gmapping.yaml"/>
+        </include>
+
+        <!-- IMAGE RECOGNITION -->
+        <include file="$(find robot_launch_files)/launch/world_modeling/image_recognition.launch">
+            <arg name="machine" value="sergio2"/>
+        </include>
+
+        <!-- PEOPLE RECOGNITION -->
+        <include file="$(find robot_launch_files)/launch/world_modeling/people_recognition.launch">
+            <arg name="machine" value="sergio2"/>
+            <arg name="robot_name" value="$(arg robot_name)" />
         </include>
 
     </group>
