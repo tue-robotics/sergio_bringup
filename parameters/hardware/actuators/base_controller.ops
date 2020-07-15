@@ -52,7 +52,7 @@ var double MAX_INTERVAL 		= 1.0;				# Max interval between reference signals
 
 	# Controller test 1: STABLE
 	var strings CONTROLLERS 			= strings ("WeakIntegrator","LowPass");
-	var array GAINS                     = array (0.20, 0.20, 0.20)
+	var array GAINS                     = array (0.15, 0.20, 0.20)
 	var array INTEGRATOR_ZERO_FREQUENCY = array (30.0, 30.0, 11.0)
 	#var array LEAD_FREQUENCY            = array (1.5, 1.5, 1.5)
 	#var array LAG_FREQUENCY             = array (9.0, 9.0, 9.0)
